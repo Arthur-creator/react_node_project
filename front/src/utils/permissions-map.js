@@ -1,5 +1,6 @@
 export const ROLES = {
-    viewer: "VIEWER",
+    guest: "GUEST",
+    user: "USER",
     editor: "EDITOR",
     admin: "ADMIN"
 };
@@ -12,7 +13,8 @@ export const SCOPES = {
 };
 
 export const PERMISSIONS = {
-    [ROLES.viewer]: [SCOPES.canView],
+    [ROLES.guest]: [],
+    [ROLES.user]: [SCOPES.canView],
     [ROLES.editor]: [SCOPES.canView, SCOPES.canEdit],
     [ROLES.admin]: [
         SCOPES.canView,
