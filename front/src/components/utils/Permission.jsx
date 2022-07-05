@@ -3,7 +3,7 @@ import {PERMISSIONS} from "../../utils/permissions-map";
 
 // Custom hook that returns the role of the user
 export const useRole = () => {
-    return "GUEST";
+    return "ADMIN";
 }
 
 
