@@ -3,11 +3,18 @@ import {PERMISSIONS} from "../../utils/permissions-map";
 
 // Custom hook that returns the role of the user
 export const useRole = () => {
-    return "GUEST";
+    const [role, setRole] = useState('GUEST');
+    useEffect(() => {
+        // Imagine that we take the role from the JWT token or a react Context
+        // const role = localStorage.getItem("role");
+        const role = 'ADMIN';
+        setRole(role);
+    }, []);
+    return role;
 }
 
 
-export const hasPermission = ({permissions, scopes}) => {
+const hasPermission = ({permissions, scopes}) => {
     const scopesMap = {};
     scopes.forEach((scope) => {
         scopesMap[scope] = true;
