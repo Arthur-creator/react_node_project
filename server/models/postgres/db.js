@@ -1,8 +1,9 @@
 const Sequelize = require("sequelize");
-
+require('dotenv').config();
 const connection = new Sequelize(process.env.DATABASE_URL, {
   useNewUrlParser: true
 });
+console.log('log',connection);
 
 connection
   .authenticate()
