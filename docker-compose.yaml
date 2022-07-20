@@ -16,16 +16,29 @@ services:
   server:
     image: node:alpine
     volumes:
-      - ./server:/usr/local/server
+      - ./:/usr/local/server
     working_dir: /usr/local/server
     environment:
-      - PORT=3000
+      - PORT=4000
       - MONGO_URL=mongodb://root:password@mongo:27017/app?authSource=admin
       - DATABASE_URL=postgres://root:password@db/app
       - JWT_SECRET=secret
     ports:
+      - "127.0.0.1:4000:4000"
+    command: sh -c "apk add --update make && npm install --workspace=server && make start-server"
+
+  front:
+    image: node:alpine
+    volumes:
+      - ./:/usr/local/front
+    working_dir: /usr/local/front
+    environment:
+      - PORT=3000
+    ports:
       - "127.0.0.1:3000:3000"
-    command: npm start
+      - "127.0.0.1:3010:3010"
+    command: sh -c "apk add --update make && npm install --workspace=front && make start-front"
+
 
   db:
     image: postgres:alpine
