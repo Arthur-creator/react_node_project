@@ -14,6 +14,14 @@ Message.init(
             defaultValue: false,
             allowNull: false
         },
+        is_updated: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
+        is_deleted: {
+            type:DataTypes.BOOLEAN,
+            defaultValue: false
+        },
         createdAt: {
             type: DataTypes.DATE,
             allowNull:false,
