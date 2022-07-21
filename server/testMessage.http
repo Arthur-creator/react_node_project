@@ -1,10 +1,10 @@
 ###
-POST http://localhost:4000/api/users/1/messages
+POST http://localhost:4000/api/users/2/messages
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IlRlc3QiLCJpYXQiOjE2NTg0MTM5NTQsImV4cCI6MTY4OTk3MTU1NH0.6G6ji5Sio16me-DAPqS7GR7lH4fb6B-mwIkdVsqdXrfNd1B83PvBz1RL4fjQCmRo4HOavcnivwMQg9sJngPHMQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IlRlc3QiLCJpYXQiOjE2NTg0MTg2OTUsImV4cCI6MTY4OTk3NjI5NX0.yR-oV71SScGAPay2wOUuRqJVmvrigd9Nna1MYnUY10YpI92n3jZIW49SgO0sMKsUSz9WR63A5GTmxG82wCq8TQ
 
 {
-  "sendToId": 3,
+  "sendToId": 1,
   "text": "Salut! Comment tu vas ?",
   "is_read": false
 }

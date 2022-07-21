@@ -10,14 +10,17 @@ router.get('/users/:id/messages', async (req,res) => {
         const messages = await Message.findAll( {
             authorId: req.params.id
         }) ;
-        if(messages)
-            res.json(messages) ;
+        if(messages) {
+            console.log("arthur le giga bg") ;
+            res.json(messages);
+        }
         else res.sendStatus(404) ;
     } catch (e) {
         res.sendStatus(500) ;
         console.error(e) ;
     }
 }) ;
+
 
 // Get all messages send by one user to another user
 router.get('/users/:uid/messages/to/:id', async (req,res) => {
@@ -38,7 +41,6 @@ router.get('/users/:uid/messages/to/:id', async (req,res) => {
 // Send a new message to one user
 router.post("/users/:id/messages", async (req, res) => {
     try {
-
         const message = await Message.create({
             authorId: parseInt(req.params.id),
             ...req.body}) ;

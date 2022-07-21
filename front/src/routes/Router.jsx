@@ -5,6 +5,7 @@ import Home from "../views/Home";
 import NotFound from "../views/NotFound";
 import RouterView from "./RouterView";
 import Login from "../views/Login";
+import Chat from "../views/Chat" ;
 
 //hook that return a list of routes
 export const useRoutes = () => {
@@ -24,6 +25,14 @@ export const useRoutes = () => {
                 <RouterView>
                     <Login/>
                 </RouterView>,
+        },
+        {
+            name: 'chat',
+            path: '/chat',
+            element:
+                <RouterView>
+                    <Chat/>
+                </RouterView>
         },
         {
             name: 'notFound',

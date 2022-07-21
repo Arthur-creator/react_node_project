@@ -8,5 +8,8 @@ export default defineConfig({
     hmr: {
       port: 3010,
     },
-  },
+    watch: {
+      usePolling:true
+    },
+  }
 })

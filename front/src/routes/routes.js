@@ -1,5 +1,6 @@
 import React, {lazy, createElement} from "react";
 import Home from "../views/Home";
+import Chat from "../views/Chat";
 
 
 const routes = [
@@ -8,6 +9,12 @@ const routes = [
         path: '/',
         component: () => <Home/>,
         meta: {},
+    },
+    {
+      name: 'chat',
+      path: '/chat',
+      component: () => <Chat/>,
+      meta: {}
     },
     {
         name: 'notFound',
