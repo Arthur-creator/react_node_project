@@ -18,6 +18,7 @@ Post.init(
         sequelize: connection,
         modelName: "post",
         paranoid: true,
+        freezeTableName: true
     }
 );
 

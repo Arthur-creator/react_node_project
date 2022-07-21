@@ -33,6 +33,7 @@ User.init(
     sequelize: connection,
     modelName: "user",
     paranoid: true,
+  freezeTableName: true
   }
 );
 
