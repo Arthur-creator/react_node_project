@@ -1,4 +1,4 @@
-const {Model, DataTypes} = require("sequelize");
+const {Model, DataTypes, Sequelize} = require("sequelize");
 const connection = require('./db') ;
 
 class Message extends Model {}
@@ -6,7 +6,7 @@ class Message extends Model {}
 Message.init(
     {
         text:{
-            type:DataTypes.TEXT,
+            type:DataTypes.STRING,
             allowNull: false,
         },
         is_read: {
@@ -14,37 +14,20 @@ Message.init(
             defaultValue: false,
             allowNull: false
         },
-        authorId: {
-            type: DataTypes.INTEGER,
-            allowNull:false,
-            references: {
-                model: 'user',
-                key: 'id'
-            }
-        },
-        sendToId: {
-            type: DataTypes.INTEGER,
-            allowNull:false,
-            references: {
-                model: 'user',
-                key: 'id'
-            }
-        },
         createdAt: {
             type: DataTypes.DATE,
             allowNull:false,
+            defaultValue:  Sequelize.fn('now')
         },
         updatedAt: {
             type: DataTypes.DATE,
             allowNull:true
-        },
+        }
     },
     {
         sequelize: connection,
         modelName: 'message',
         paranoid: true,
-        freezeTableName: true
-
     }
 ) ;
 

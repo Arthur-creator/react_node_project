@@ -1,6 +1,7 @@
 const express = require("express");
 const UserRouter = require("./routes/user");
 const SecurityRouter = require("./routes/security");
+const MessageRouter = require('./routes/message') ;
 const verifyToken = require("./middlewares/verifyToken");
 const app = express();
 
@@ -21,6 +22,7 @@ app.get("/", (req, res, next) => {
 app.use("/", SecurityRouter);
 
 app.use("/api", verifyToken, UserRouter);
+app.use('/api', verifyToken, MessageRouter)
 
 app.listen(process.env.PORT, () => {
     console.log("Server is listening on port " + process.env.PORT);
