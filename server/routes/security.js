@@ -5,7 +5,7 @@ const { User } = require("../models/postgres");
 const { ValidationError } = require("sequelize");
 
 const router = new Router();
-const jwt = require("jsonwebtoken");
+// const jwt = require("jsonwebtoken");
 const nodemailer = require("../configs/nodemailer.config");
 const controller = require("../controller/registrationController");
 
@@ -48,10 +48,17 @@ router.post(
     body('lastname').isString(),
     async (req, res) => {
       try {
-        const token = jwt.sign({email: req.body.email}, process.env.JWT_SECRET,
-        {
-            expiresIn: "30m"
-        });
+
+        const characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        let token = '';
+        for (let i = 0; i < 25; i++) {
+          token += characters[Math.floor(Math.random() * characters.length )];
+        }
+
+        // const token = jwt.sign({email: req.body.email}, process.env.JWT_SECRET,
+        // {
+        //     expiresIn: "30m"
+        // });
         const confirmationCode = {
           confirmationCode: token,
         }
