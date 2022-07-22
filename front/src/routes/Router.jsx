@@ -5,6 +5,8 @@ import Home from "../views/Home";
 import NotFound from "../views/NotFound";
 import RouterView from "./RouterView";
 import Login from "../views/Login";
+import Register from "../views/Register";
+import AccountConfirmation from "../views/AccountConfirmation";
 
 //hook that return a list of routes
 export const useRoutes = () => {
@@ -13,7 +15,7 @@ export const useRoutes = () => {
             name: 'home',
             path: '/',
             element:
-                <RouterView>
+                <RouterView scopes={[SCOPES.canView]}>
                     <Home title="Home"/>
                 </RouterView>,
         },
@@ -23,6 +25,22 @@ export const useRoutes = () => {
             element:
                 <RouterView>
                     <Login/>
+                </RouterView>,
+        },
+        {
+            name: 'register',
+            path: '/register',
+            element:
+                <RouterView>
+                    <Register/>
+                </RouterView>,
+        },
+        {
+            name: 'confirm',
+            path: '/confirm/:confirmationCode',
+            element:
+                <RouterView>
+                    <AccountConfirmation/>
                 </RouterView>,
         },
         {

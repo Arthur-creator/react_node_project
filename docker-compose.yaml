@@ -41,13 +41,18 @@ services:
 
 
   db:
-    image: postgres:alpine
-    volumes:
-      - db-data:/var/lib/postgresql/data
+    image: postgres:13-alpine
+    restart: always
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=app
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - target: 5432
+        published: 5432
+        protocol: tcp
 
 volumes:
   mongo-data: {}
