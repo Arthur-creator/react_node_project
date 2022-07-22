@@ -8,8 +8,9 @@ export default function RouterView({children, scopes = []}) {
         const permissions = PERMISSIONS[role];
         const permissionGranted = hasPermission({permissions, scopes});
         if (!permissionGranted) {
+            console.log("Permission denied");
             return (
-                <Navigate to="/login" />
+                <Navigate to="login" />
             )
         }
     }

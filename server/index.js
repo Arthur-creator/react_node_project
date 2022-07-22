@@ -9,7 +9,21 @@ const MessageAnaylitcsRouter = require('./routes/messageAnalytiques') ;
 const verifyToken = require("./middlewares/verifyToken");
 const app = express();
 
-app.use(cors()) ;
+const cors = require('cors');
+
+const whitelist = ["http://localhost:3000"]
+const corsOptions = {
+    origin: function (origin, callback) {
+        if (!origin || whitelist.indexOf(origin) !== -1) {
+            callback(null, true)
+        } else {
+            callback(new Error("Not allowed by CORS"))
+        }
+    },
+    credentials: true,
+}
+app.use(cors(corsOptions))
+
 app.use(express.json());
 app.use(
     express.urlencoded({
