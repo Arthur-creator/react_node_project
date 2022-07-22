@@ -8,10 +8,12 @@ const router = new Router() ;
 router.get('/users/:id/messages', async (req,res) => {
     try {
         const messages = await Message.findAll( {
-            authorId: req.params.id
+            authorId: req.params.id,
+            order : [
+                ['id','ASC']
+            ]
         }) ;
         if(messages) {
-            console.log("arthur le giga bg") ;
             res.json(messages);
         }
         else res.sendStatus(404) ;
@@ -27,10 +29,14 @@ router.get('/users/:uid/messages/to/:id', async (req,res) => {
     try {
         const messages = await Message.findAll({
             authorId : req.params.uid,
-            sendToId : req.params.id
+            sendToId : req.params.id,
+            order : [
+                ['id','ASC']
+            ]
         }) ;
-        if(messages)
-            res.json(messages) ;
+        if(messages) {
+            res.json(messages);
+        }
         else res.sendStatus(404) ;
     } catch (e) {
         res.sendStatus(500) ;
@@ -59,13 +65,17 @@ router.post("/users/:id/messages", async (req, res) => {
     }
 }) ;
 
-router.put("/users/:id/messages", async (req,res) => {
+router.put("/users/:id/messages/:message_id", async (req,res) => {
     try {
-        const [, lines] = await Message.update(req.body, {
-            where: {id: req.params.id},
+        const result = await Message.update(req.body, {
+            where: {
+                authorId: req.params.id,
+                id: req.params.message_id,
+            },
             returning: true,
             individualHooks: true
         }) ;
+        const [, lines] = result ;
         if(!lines[0]) res.sendStatus(404) ;
         else res.json(lines[0]) ;
     }catch (e) {
@@ -81,9 +91,14 @@ router.put("/users/:id/messages", async (req,res) => {
     }
 }) ;
 
-router.delete("/users/:id/message", async (req,res)=> {
+router.delete("/users/:id/messages/:message_id", async (req,res)=> {
     try {
-        const nbLines = await Message.delete({where: {id: req.params.id}}) ;
+        const nbLines = await Message.destroy({where:
+                {
+                    authorId: req.params.id,
+                    id: req.params.message_id
+                }
+        }) ;
         if(!nbLines) res.sendStatus(404) ;
         else res.sendStatus(204) ;
     } catch (e) {
