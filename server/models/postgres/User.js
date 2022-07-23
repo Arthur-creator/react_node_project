@@ -31,7 +31,7 @@ User.init(
   },
   {
     sequelize: connection,
-    modelName: "user",
+    modelName: "users",
     paranoid: true,
   }
 );
