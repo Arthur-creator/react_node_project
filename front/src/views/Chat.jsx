@@ -63,10 +63,41 @@ export default function Chat() {
                 is_read: false
             })
         }).then((res)=> res.json())
-            .then((data)=> {
+            .then( async (data)=> {
                 setPremierMessage(true) ;
                 setNewMessage(true) ;
                 messageSenderRef.current.children[1].children[0].value = "" ;
+
+                await fetch("http://localhost:4000/messages",{
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        'author' : {
+                            id: author.id,
+                            email: author.email,
+                            name: author.name,
+                            is_admin: author.is_admin,
+                            createdAt: author.createdAt
+                        },
+                        'sendTo' : {
+                            id: sendTo.id,
+                            email: sendTo.email,
+                            name: sendTo.name,
+                            is_admin: sendTo.is_admin,
+                            createdAt: sendTo.createdAt
+                        },
+                        'id' : data.id,
+                        'is_read': data.is_read,
+                        'is_updated': data.is_updated,
+                        'is_deleted' : data.is_deleted,
+                        'createAt': data.createAt,
+                        'updatedAt' : data.updatedAt,
+                        'text' : data.text,
+                        'deletedAt': data.deletedAt
+                    })
+                }) ;
             }) ;
     }
 
@@ -96,10 +127,23 @@ export default function Chat() {
                 is_updated:true
             })
         }).then((res) => res.json())
-            .then((data) =>{
+            .then( async (data) =>{
                 setInEdit(false) ;
                 setEditConfirmed(true) ;
                 messageSenderRef.current.children[1].children[0].value = "" ;
+
+                await fetch("http://localhost:4000/messages/" + messageToEdit.id,{
+                    method: 'PUT',
+                    headers: {
+                        'Content-type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        'is_updated': true,
+                        'updatedAt' : data.updatedAt,
+                        'text' :data.text,
+                    })
+                });
+
             }) ;
     } ;
 
@@ -113,10 +157,26 @@ export default function Chat() {
             body: JSON.stringify({
                 is_deleted:true
             })
-        }).then(() => {
-           getMessages() ;
+        }).then(async () => {
+            await getMessages() ;
+            await fetch("http://localhost:4000/messages/" + message.id,{
+                method: 'PUT',
+                headers: {
+                    'Content-type': 'application/json',
+                },
+                body: JSON.stringify({
+                    is_deleted:true
+                })
+            });
         }) ;
     };
+
+    const getUserById = async (id) => {
+        const res = await fetch("http://localhost:4000/api/users/" +id, {
+            method: 'GET',
+        })  ;
+       return await res.json() ;
+    } ;
 
     const addMessageMenuRef = (elm, key) => {
         if(elm &&  !messageMenuRef.current.includes(elm))
@@ -163,6 +223,14 @@ export default function Chat() {
     const [inEdit, setInEdit] = useState(false) ;
     const [messageToEdit,setMessageToEdit] = useState() ;
     const [editConfirmed, setEditConfirmed] = useState(false) ;
+    const [author, setAuthor] = useState() ;
+    const [sendTo, setSendTo] = useState() ;
+    const [friendList, setFriendList] = useState() ;
+
+   useEffect( ()=>{
+        getUserById(1).then(setAuthor) ;
+        getUserById(2).then(setSendTo) ;
+    },[]) ;
 
     useEffect(()=> {
         if(premierMessage)
