@@ -172,7 +172,7 @@ export default function Chat() {
     };
 
     const getUserById = async (id) => {
-        const res = await fetch("http://localhost:4000/api/users/" +id, {
+        const res = await fetch("http://localhost:4000/users/" +id, {
             method: 'GET',
         })  ;
        return await res.json() ;
