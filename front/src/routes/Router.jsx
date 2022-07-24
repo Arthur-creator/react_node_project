@@ -6,6 +6,8 @@ import NotFound from "../views/NotFound";
 import RouterView from "./RouterView";
 import Login from "../views/Login";
 import Chat from "../views/Chat" ;
+import Admin from "../views/Admin/Admin";
+import {EditAccount} from "../components/utils/EditAccount";
 
 //hook that return a list of routes
 export const useRoutes = () => {
@@ -38,6 +40,22 @@ export const useRoutes = () => {
             name: 'notFound',
             path: '*',
             element: <NotFound/>,
+        },
+        {
+            name: 'admin',
+            path: '/admin',
+            element:
+                <RouterView>
+                    <Admin/>
+                </RouterView>
+        },
+        {
+            name: 'userEdit',
+            path: '/users/:userId',
+            element:
+                <RouterView>
+                    <EditAccount/>
+                </RouterView>
         },
     ];
     return routes.map((route) => {

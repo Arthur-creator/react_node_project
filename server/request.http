@@ -51,8 +51,9 @@ POST http://localhost:4000/login
 Content-Type: application/json
 
 {
-    "email": "Alexb@ok.com",
-    "password": "$2a$10$aHbWkgDazrUAc2PQrl5sYO8lxTViqQinxIvFctnPA4peOH2fj.KAq"
+    "email": "test@test.com",
+    "password": "$2a$10$GylRsT6BglR.Ttp4u.IfteHCjIazqDBkhbYAyTDuh02dmiGV9EuZ6"
+
 }
 
 ###
