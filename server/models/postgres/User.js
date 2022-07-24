@@ -28,6 +28,11 @@ User.init(
       allowNull: false,
       defaultValue: false,
     },
+      isReported: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
   },
   {
     sequelize: connection,

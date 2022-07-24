@@ -41,9 +41,9 @@ POST http://localhost:4000/register
 Content-Type: application/json
 
 {
-    "email": "Alexb@ok.com",
-    "password": "test",
-    "name": "Test"
+    "email": "test@test.com",
+    "password": "arhtur",
+    "name": "ausecours"
 }
 
 ###
@@ -51,8 +51,8 @@ POST http://localhost:4000/login
 Content-Type: application/json
 
 {
-    "email": "Aleexb@ok.com",
-    "password": "$2a$10$wryn/FlkGScMjY.OOZozYevUE3Db3ZYjrqOueoDVrJszYVeavFqMS"
+    "email": "test@test.com",
+    "password": "$2a$10$GylRsT6BglR.Ttp4u.IfteHCjIazqDBkhbYAyTDuh02dmiGV9EuZ6"
 }
 
 ###
