@@ -1,25 +1,30 @@
 import * as React from 'react';
 import Link from '@mui/material/Link';
-import {verifyUser} from "../services/UserService";
+import {verifyUser} from "../services/AuthService";
 import {useParams} from "react-router-dom";
 import {useEffect} from "react";
 
 const AccountConfirmation = (props) => {
 
-    const isVerified = false;
-    const conformationCode = useParams();
+    const [isVerified, setIsVerified] = React.useState(false);
+    const conformationCode = useParams().confirmationCode;
 
     useEffect(() => {
-        if (verifyUser(conformationCode.confirmationCode)) {
-            const isVerified = true;
-        }
+        verifyUser(conformationCode)
+            .then(response => {
+                setIsVerified(true);
+            }
+            )
+            .catch(error => {
+                console.log(error);
+            });
     }, []);
 
     return (
-        <div>
-            {isVerified ? <div>Account confirmed</div> : <div>Account not confirmed</div>}
-            {isVerified ? <Link to="/login">Login</Link> : <Link to="/">Home</Link>}
-        </div>
+        <>
+            {isVerified ? <div>Account confirmed</div> : <div>An Error Occur</div>}
+            {isVerified ? <Link href="/login">Login</Link> : <Link href="/">Return to home</Link>}
+        </>
     );
 };
 

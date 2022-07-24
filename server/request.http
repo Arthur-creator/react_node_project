@@ -48,6 +48,7 @@ Content-Type: application/json
 {
     "email": "ok4@ok.com",
     "password": "dsfcsdvcsd",
+    "confirmPassword": "dsfcsdvcsd",
     "firstname": "John",
     "lastname": "Doe"
 }

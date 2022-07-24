@@ -7,7 +7,13 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import {registerUser} from "../services/UserService";
+import {registerUser} from "../services/AuthService";
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 export default function SignUp() {
 
@@ -15,6 +21,11 @@ export default function SignUp() {
     const [lastName, setLastName] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const [confirmPassword, setConfirmPassword] = React.useState('');
+    const [message, setMessage] = React.useState('');
+    const [errors, setErrors] = React.useState([]);
+    const [open, setOpen] = React.useState(false);
+    const [severity, setSeverity] = React.useState('');
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -23,9 +34,29 @@ export default function SignUp() {
             lastname: event.target.lastname.value,
             email: event.target.email.value,
             password: event.target.password.value,
+            confirmPassword: event.target.confirmPassword.value,
         };
-        console.log(user);
-        registerUser(user);
+        registerUser(user).then(response => {
+            setOpen(true);
+            setSeverity('success');
+            setMessage(response.message);
+            setFirstName('');
+            setLastName('');
+            setEmail('');
+            setPassword('');
+            setConfirmPassword('');
+        }).catch(error => {
+            if (error.response.data.message) {
+                setMessage(error.response.data.message);
+            }
+            else {
+                const errors = error.response.data.errors;
+                setErrors(errors);
+            }
+            setSeverity('error');
+            setOpen(true);
+        }
+        );
     };
 
     const handleChange = (event) => {
@@ -39,7 +70,18 @@ export default function SignUp() {
         } else if (name === 'password') {
             setPassword(value);
         }
+        else if (name === 'confirmPassword') {
+            setConfirmPassword(value);
+        }
     }
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen(false);
+    };
 
     return (
                 <Box
@@ -50,6 +92,11 @@ export default function SignUp() {
                         alignItems: 'center',
                     }}
                 >
+                    {message && <Snackbar onClose={handleClose} autoHideDuration={6000} open={open}><Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>{message}</Alert></Snackbar>}
+                    {errors.map((error, key) => {
+                        return <Snackbar onClose={handleClose} key={key} autoHideDuration={6000} open={open}><Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>{error.param} : {error.msg}</Alert></Snackbar>
+                    }
+                    )}
                     <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
                         <LockOutlinedIcon />
                     </Avatar>
@@ -68,7 +115,8 @@ export default function SignUp() {
                                     label="First Name"
                                     autoFocus
                                     value={firstName}
-                                    onChange={handleChange} />
+                                    onChange={handleChange}
+                                />
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <TextField
@@ -79,7 +127,8 @@ export default function SignUp() {
                                     name="lastname"
                                     autoComplete="family-name"
                                     value={lastName}
-                                    onChange={handleChange} />
+                                    onChange={handleChange}
+                                />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
@@ -90,7 +139,8 @@ export default function SignUp() {
                                     name="email"
                                     autoComplete="email"
                                     value={email}
-                                    onChange={handleChange} />
+                                    onChange={handleChange}
+                                />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
@@ -102,7 +152,21 @@ export default function SignUp() {
                                     id="password"
                                     autoComplete="new-password"
                                     value={password}
-                                    onChange={handleChange} />
+                                    onChange={handleChange}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    name="confirmPassword"
+                                    label="Password Confirm"
+                                    type="password"
+                                    id="confirmPassword"
+                                    autoComplete="confirm-password"
+                                    value={confirmPassword}
+                                    onChange={handleChange}
+                                />
                             </Grid>
                         </Grid>
                         <Button
@@ -115,7 +179,7 @@ export default function SignUp() {
                         </Button>
                         <Grid container justifyContent="flex-end">
                             <Grid item>
-                                <Link href="/login  " variant="body2">
+                                <Link href="/login" variant="body2">
                                     Already have an account? Sign in
                                 </Link>
                             </Grid>

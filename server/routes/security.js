@@ -1,13 +1,42 @@
 const { Router } = require("express");
 const { body, validationResult } = require('express-validator');
-const { createToken } = require("../lib/jwt");
 const { User } = require("../models/postgres");
 const { ValidationError } = require("sequelize");
 
 const router = new Router();
-// const jwt = require("jsonwebtoken");
+const bcryptjs = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const nodemailer = require("../configs/nodemailer.config");
-const controller = require("../controller/registrationController");
+const {generateAccessToken, generateRefreshToken} = require("../lib/jwt");
+
+let refreshTokens = [];
+
+router.post("/refresh", (req, res) => {
+  //take the refresh token from the user
+  const refreshToken = req.body.token;
+
+  //send error if there is no token or it's invalid
+  if (!refreshToken) return res.status(401).json("You are not authenticated!");
+  if (!refreshTokens.includes(refreshToken)) {
+    return res.status(403).json("Refresh token is not valid!");
+  }
+  jwt.verify(refreshToken, "myRefreshSecretKey", (err, user) => {
+    err && console.log(err);
+    refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
+
+    const newAccessToken = generateAccessToken(user);
+    const newRefreshToken = generateRefreshToken(user);
+
+    refreshTokens.push(newRefreshToken);
+
+    res.status(200).json({
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
+    });
+  });
+
+  //if everything is ok, create new access token, refresh token and send to user
+});
 
 router.post("/login", async (req, res) => {
   try {
@@ -15,14 +44,15 @@ router.post("/login", async (req, res) => {
 
     if (!user) {
       return res.status(401).json({
-        email: "Email not found",
+        message: "Your email or password is incorrect",
       });
     }
 
-    if (user.password !== req.body.password) {
-      return res.status(401).json({
-        password: "Password is incorrect",
-      });
+    const isValid = await bcryptjs.compare(req.body.password, user.password);
+    if (!isValid) {
+        return res.status(401).json({
+            message: "Your email or password is incorrect",
+        });
     }
 
     if (user.isVerified !== true) {
@@ -31,8 +61,16 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    res.json({
-      token: createToken(user),
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
+    refreshTokens.push(refreshToken);
+    res.status(200).json({
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      accessToken,
+      refreshToken,
     });
   } catch (error) {
     res.sendStatus(500);
@@ -40,14 +78,49 @@ router.post("/login", async (req, res) => {
   }
 });
 
+const verify = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (authHeader) {
+    const token = authHeader.split(" ")[1];
+
+    jwt.verify(token, "mySecretKey", (err, user) => {
+      if (err) {
+        return res.status(403).json("Token is not valid!");
+      }
+
+      req.user = user;
+      next();
+    });
+  } else {
+    res.status(401).json("You are not authenticated!");
+  }
+};
+
 router.post(
     "/register",
     body('email').isEmail(),
     body('password').isLength({ min: 8, max: 20 }),
+    body('confirmPassword').isLength({ min: 8, max: 20 }),
     body('firstname').isString(),
     body('lastname').isString(),
     async (req, res) => {
       try {
+
+        const checkUser = await User.findOne({ where: { email: req.body.email } });
+
+        if (checkUser) {
+          const message = {
+            message: "Account already exists. Please login or verify your email !",
+          };
+          return res.status(400).json(message);
+        }
+
+        if (req.body.password !== req.body.confirmPassword) {
+          const message = {
+            message: "Passwords do not match",
+          };
+          return res.status(400).json(message);
+        }
 
         const characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         let token = '';
@@ -68,7 +141,7 @@ router.post(
         };
         const user = await User.create(userWithToken);
         nodemailer.sendConfirmationEmail(
-            user.username,
+            user.firstname + " " + user.lastname,
             user.email,
             user.confirmationCode
         );
@@ -90,6 +163,26 @@ router.post(
     }
 );
 
-router.get("/api/auth/confirm/:confirmationCode", controller.verifyUser)
+router.get("/confirm/:confirmationCode", async (req, res) => {
+  try {
+    await User.update(
+        {
+          isVerified: true,
+        },
+        {
+          where: { confirmationCode: req.params.confirmationCode },
+        }
+    );
+
+    return res.status(200).json({
+      message: "Account Verified"
+    });
+  }
+  catch (error) {
+    return res.status(500).json({
+      message: "Internal Server Error"
+    });
+  }
+});
 
 module.exports = router;
