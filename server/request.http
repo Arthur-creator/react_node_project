@@ -34,12 +34,13 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywibmFtZSI6I
 DELETE http://localhost:4000/api/users/1
 
 ###
-POST http://localhost:3000/register
+POST http://localhost:4000/register
 Content-Type: application/json
 
 {
     "email": "ok4@ok.com",
     "password": "dsfcsdvcsd",
+    "confirmPassword": "dsfcsdvcsd",
     "firstname": "John",
     "lastname": "Doe"
 }
