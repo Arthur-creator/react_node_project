@@ -6,6 +6,8 @@ const MessageSchema = new mongoose.Schema({
     is_read: Boolean,
     is_updated: Boolean,
     is_deleted: Boolean,
+    is_reported: Boolean,
+    is_moderated: Boolean,
     createAt: Date,
     updatedAt:Date,
     deletedAt:Date,

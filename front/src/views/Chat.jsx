@@ -19,6 +19,7 @@ import IconButton from "@mui/material/IconButton";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ClearIcon from '@mui/icons-material/Clear';
+import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 
 const useStyles = makeStyles({
     table: {
@@ -39,10 +40,14 @@ const useStyles = makeStyles({
         overflowY: 'auto'
     },
     messageFromAuthor: {
-        background: '#E4E6EB'
+        background: '#E4E6EB',
+        padding: '5px 15px',
+        borderRadius: '10px'
     },
     messageFromSender: {
-        background: 'rgb(25, 118, 210)'
+        background: 'rgb(120,180,232)',
+        padding: '5px 15px',
+        borderRadius: '10px'
     }
 });
 
@@ -92,6 +97,8 @@ export default function Chat() {
                         'is_read': data.is_read,
                         'is_updated': data.is_updated,
                         'is_deleted' : data.is_deleted,
+                        'is_reported': data.is_reported,
+                        'is_moderated' : data.is_moderated,
                         'createAt': data.createAt,
                         'updatedAt' : data.updatedAt,
                         'text' : data.text,
@@ -166,6 +173,30 @@ export default function Chat() {
                 },
                 body: JSON.stringify({
                     is_deleted:true
+                })
+            });
+        }) ;
+    };
+
+    const reportMessage = (key,message) => {
+        fetch(`http://localhost:4000/api/users/2/messages/${message.id}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IlRlc3QiLCJpYXQiOjE2NTg0MTg2OTUsImV4cCI6MTY4OTk3NjI5NX0.yR-oV71SScGAPay2wOUuRqJVmvrigd9Nna1MYnUY10YpI92n3jZIW49SgO0sMKsUSz9WR63A5GTmxG82wCq8TQ',
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                is_reported:true
+            })
+        }).then(async () => {
+            await getMessages() ;
+            await fetch("http://localhost:4000/messages/" + message.id,{
+                method: 'PUT',
+                headers: {
+                    'Content-type': 'application/json',
+                },
+                body: JSON.stringify({
+                    is_reported:true
                 })
             });
         }) ;
@@ -248,7 +279,7 @@ export default function Chat() {
         else if (newMessage === true) {
             bottomMessageRef.current.scrollIntoView({behavior: 'smooth'}) ;
             setNewMessage(false) ;
-        };
+        }
     },[messages]) ;
 
     useEffect(() => {
@@ -310,20 +341,27 @@ export default function Chat() {
                                 messages == null ? <h1>Aucun message</h1> :  messages.map((message, key) => {
                                     if(message.is_deleted)
                                         return <ListItem  key={message.id}>
-                                            <Grid container>
-                                                <Grid item xs={12} >
+                                            <Grid container style={{justifyContent: message.authorId === 1 ? 'flex-end' : ''}} >
+                                                <Grid className={message.authorId === 1 ? classes.messageFromAuthor : classes.messageFromSender}  item xs={12}  style={{flex:'initial'}}>
                                                     <ListItemText  style={{fontStyle: "italic"}} align={ message.authorId === 1 ? 'right' : 'left'} primary={'Ce message a été supprimé'}/>
+                                                </Grid>
+                                            </Grid>
+                                        </ListItem>
+                                    else if (message.is_moderated)
+                                        return <ListItem  key={message.id}>
+                                            <Grid container style={{justifyContent: message.authorId === 1 ? 'flex-end' : ''}} >
+                                                <Grid className={message.authorId === 1 ? classes.messageFromAuthor : classes.messageFromSender}  item xs={12} style={{flex:'initial'}} >
+                                                    <ListItemText  style={{fontStyle: "italic", color:'darkorange'}} align={ message.authorId === 1 ? 'right' : 'left'} primary={'Ce message a été modéré'}/>
                                                 </Grid>
                                             </Grid>
                                         </ListItem>
                                     else
                                         if (message.is_updated)
                                             return <ListItem  key={message.id}>
-                                                <Grid container >
-                                                    <Grid item xs={12}>
+                                                <Grid container style={{justifyContent: message.authorId === 1 ? 'flex-end' : ''}} >
                                                         {
                                                             message.authorId === 1 ?
-                                                                <Grid style={{display: "flex" ,alignItems:'center' , flexDirection: 'row-reverse'}} item xs={12} onMouseLeave={() => hideButton(key)} onMouseOver={() => displayButton(key)}>
+                                                                <Grid className={message.authorId === 1 ? classes.messageFromAuthor : classes.messageFromSender}  style={{display: "flex" ,alignItems:'center' , flexDirection: 'row-reverse', flex:'initial'}} item xs={12} onMouseLeave={() => hideButton(key)} onMouseOver={() => displayButton(key)}>
                                                                     <ListItemText style={{flex:'initial', paddingLeft:'10px'}}  align={ message.authorId === 1 ? 'right' : 'left'} primary={message.text} secondary={'modifié'}  />
                                                                     <div style={{ display: 'none ', flexDirection:'row-reverse', alignItems:'center'}} key={key} ref={(ref) => addMessageMenuRef(ref,key)}>
                                                                         <IconButton onClick={() => displayButtonGroup(key)}  size={"small"}  style={{ alignItems:'center' , justifyContent: 'center' , background: '#F5F5F' }}  aria-label="menu"  color="primary" component="label">
@@ -340,19 +378,28 @@ export default function Chat() {
                                                                     </div>
                                                                 </Grid>
                                                                 :
-                                                                <Grid item xs={12}>
+                                                                <Grid className={message.authorId === 1 ? classes.messageFromAuthor : classes.messageFromSender}  style={{display: "flex", alignItems:'center' , flexDirection: 'row', flex:'initial'}}  item xs={12} onMouseLeave={() => hideButton(key)} onMouseOver={() => displayButton(key)}>
                                                                     <ListItemText  align={ message.authorId === 1 ? 'right' : 'left'} primary={message.text} secondary={'modifié'} />
+                                                                    <div style={{ display: 'none ', flexDirection:'row', alignItems:'center'}} key={key} ref={(ref) => addMessageMenuRef(ref,key)}>
+                                                                        <IconButton onClick={() => displayButtonGroup(key)}  size={"small"}  style={{ alignItems:'center' , justifyContent: 'center' , background: '#F5F5F' }}  aria-label="menu"  color="primary" component="label">
+                                                                            <MoreVertIcon />
+                                                                        </IconButton>
+                                                                        <ButtonGroup style={{ display: 'none '}} orientation="vertical" aria-label="vertical outlined button group">
+                                                                            <IconButton onClick={() => reportMessage(key,message)} >
+                                                                                <ReportProblemIcon color={"warning"} />
+                                                                            </IconButton>
+                                                                        </ButtonGroup>
+                                                                    </div>
                                                                 </Grid>
                                                         }
-                                                    </Grid>
                                                 </Grid>
                                              </ListItem>
                                         else {
-                                            return <ListItem  key={message.id}>
-                                                <Grid container>
+                                            return <ListItem   key={message.id}>
+                                                <Grid container style={{justifyContent: message.authorId === 1 ? 'flex-end' : ''}}>
                                                     {
                                                         message.authorId === 1 ?
-                                                            <Grid style={{display: "flex", alignItems:'center' , flexDirection: 'row-reverse'}}  item xs={12} onMouseLeave={() => hideButton(key)} onMouseOver={() => displayButton(key)}>
+                                                            <Grid className={message.authorId === 1 ? classes.messageFromAuthor : classes.messageFromSender}  style={{display: "flex", alignItems:'center' , justifyContent:'flex-end', flexDirection: 'row-reverse', flex:'initial'}}  item xs={12} onMouseLeave={() => hideButton(key)} onMouseOver={() => displayButton(key)}>
                                                                 <ListItemText style={{flex:'initial', paddingLeft:'10px'}} align={ message.authorId === 1 ? 'right' : 'left'} primary={message.text} />
                                                                 <div style={{ display: 'none ',flexDirection:'row-reverse', alignItems:'center'}} key={key} ref={(ref) => addMessageMenuRef(ref,key)}>
                                                                     <IconButton onClick={() => displayButtonGroup(key)}  size={"small"}  style={{ alignItems:'center' , justifyContent: 'center' , background: '#F5F5F' }}  aria-label="menu"  color="primary" component="label">
@@ -369,8 +416,18 @@ export default function Chat() {
                                                                 </div>
                                                             </Grid>
                                                             :
-                                                            <Grid item xs={12}>
-                                                                <ListItemText  align={ message.authorId === 1 ? 'right' : 'left'} primary={message.text} />
+                                                            <Grid className={message.authorId === 1 ? classes.messageFromAuthor : classes.messageFromSender} style={{display: "flex",  alignItems:'center' , flexDirection: 'row', flex:'initial'}}  item xs={12} onMouseLeave={() => hideButton(key)} onMouseOver={() => displayButton(key)}>
+                                                                <ListItemText style={{}} align={ message.authorId === 1 ? 'right' : 'left'} primary={message.text} />
+                                                                <div style={{ display: 'none ', flexDirection:'row', alignItems:'center'}} key={key} ref={(ref) => addMessageMenuRef(ref,key)}>
+                                                                    <IconButton onClick={() => displayButtonGroup(key)}  size={"small"}  style={{ alignItems:'center' , justifyContent: 'center' , background: '#F5F5F' }}  aria-label="menu"  color="primary" component="label">
+                                                                        <MoreVertIcon />
+                                                                    </IconButton>
+                                                                    <ButtonGroup style={{ display: 'none '}} orientation="vertical" aria-label="vertical outlined button group">
+                                                                        <IconButton onClick={() => reportMessage(key,message)} >
+                                                                            <ReportProblemIcon color={"warning"} />
+                                                                        </IconButton>
+                                                                    </ButtonGroup>
+                                                                </div>
                                                             </Grid>
                                                     }
                                                 </Grid>

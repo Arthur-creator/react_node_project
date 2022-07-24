@@ -22,6 +22,14 @@ Message.init(
             type:DataTypes.BOOLEAN,
             defaultValue: false
         },
+        is_reported: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
+        is_moderated: {
+            type:DataTypes.BOOLEAN,
+            defaultValue: false
+        },
         createdAt: {
             type: DataTypes.DATE,
             allowNull:false,
