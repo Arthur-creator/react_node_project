@@ -1,6 +1,7 @@
 import {Box, Button, Card, CardActions, CardContent, Skeleton, Stack, Typography} from "@mui/material";
 import ProfilePicture from "./ProfilePicture";
 import {useEffect, useState} from "react";
+import AddFriendButton from "./AddFriendButton";
 
 
 function SkeletonLoader() {
@@ -46,7 +47,7 @@ function RecommendedFriendCard({user}) {
                 </Typography>
             </CardContent>
             <CardActions>
-                <Button size="small">Add as friend</Button>
+                <AddFriendButton/>
             </CardActions>
         </Card>
     )
