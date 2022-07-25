@@ -1,8 +1,9 @@
-import {Box, Button, Card, CardContent, Typography} from "@mui/material";
+import {Box, Button, Card, CardContent, Stack, Typography} from "@mui/material";
 import ProfilePicture from "../components/ProfilePicture";
 import {useState} from "react";
 import RecommendedFriends from "../components/RecommendedFriends";
 import {useSearchParams} from "react-router-dom";
+import AddFriendButton from "../components/AddFriendButton";
 
 
 function UserCard({user}) {
@@ -26,7 +27,7 @@ function UserCard({user}) {
                             <Typography color="text.secondary">{user.class}</Typography>
                         </Box>
                     </Box>
-                    <Button size="small" variant={"contained"}>Add as friend</Button>
+                    <AddFriendButton/>
                 </Box>
             </CardContent>
         </Card>
@@ -47,7 +48,7 @@ function SearchResults() {
     ]);
 
     return (
-        <>
+        <Stack spacing={2}>
             <Typography variant="h5" component="h2">Results for <strong>{searchParams.get('q')}</strong></Typography>
             <Box sx={{
                 display: 'flex',
@@ -56,7 +57,7 @@ function SearchResults() {
             }}>
                 {users.map(user => <UserCard key={user.name} user={user}/>)}
             </Box>
-        </>
+        </Stack>
     )
 }
 
