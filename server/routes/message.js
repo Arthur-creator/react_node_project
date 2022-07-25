@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const { Message } = require('../models/postgres') ;
-const { ValidationError } = require("sequelize");
+const { ValidationError, Op } = require("sequelize");
+
 
 const router = new Router() ;
 
@@ -28,8 +29,30 @@ router.get('/users/:id/messages', async (req,res) => {
 router.get('/users/:uid/messages/to/:id', async (req,res) => {
     try {
         const messages = await Message.findAll({
-            authorId : req.params.uid,
-            sendToId : req.params.id,
+            /*where: {
+                $or: [
+                    {
+                        authorId : {$eq: req.params.uid},
+                        sendToId : {$eq: req.params.id}
+                    },
+                    {
+                        authorId : {$eq: req.params.id},
+                        sendToId : {$eq: req.params.uid}
+                    }
+                ]
+            } ,*/
+            where: {
+                [Op.or] : [
+                    {
+                        authorId : req.params.uid,
+                        sendToId :  req.params.id
+                    },
+                    {
+                        authorId :  req.params.id,
+                        sendToId :  req.params.uid
+                    }
+                ]
+            },
             order : [
                 ['id','ASC']
             ]
