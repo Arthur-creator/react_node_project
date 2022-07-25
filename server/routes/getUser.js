@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { User } = require("../models/postgres");
+const { User, Friends} = require("../models/postgres");
 const { ValidationError } = require("sequelize");
 
 const router = new Router();
@@ -27,5 +27,19 @@ router.get("/users/:id", async (req, res) => {
         console.error(error);
     }
 });
+
+router.get('/friends/:id',async(req,res)=> {
+    try {
+        const friends = await Friends.findAll({where:req.query});
+        if (!friends) {
+            res.sendStatus(404);
+        } else {
+            res.json(friends);
+        }
+    } catch (error) {
+        res.sendStatus(500);
+        console.error(error);
+    }
+}) ;
 
 module.exports = router;

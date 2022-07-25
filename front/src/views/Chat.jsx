@@ -63,7 +63,7 @@ export default function Chat() {
                 'Content-type': 'application/json',
             },
             body: JSON.stringify({
-                sendToId:2,
+                sendToId: sendTo.id,
                 text: messageSenderRef.current.children[1].children[0].value,
                 is_read: false
             })
@@ -109,18 +109,25 @@ export default function Chat() {
     }
 
     const getMessages = async () => {
-       const res = await fetch("http://localhost:4000/api/users/1/messages", {
-           method: 'GET',
-           headers: {
-               'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IlRlc3QiLCJpYXQiOjE2NTg0MTg2OTUsImV4cCI6MTY4OTk3NjI5NX0.yR-oV71SScGAPay2wOUuRqJVmvrigd9Nna1MYnUY10YpI92n3jZIW49SgO0sMKsUSz9WR63A5GTmxG82wCq8TQ',
-               'Content-type': 'application/json',
-           }
-       })  ;
-       const data = await res.json() ;
-        setMessages(data);
-       if(data.length > messages.length) {
-           setNewMessage(true) ;
-       }
+        if(author && sendTo) {
+            try {
+                const res = await fetch("http://localhost:4000/api/users/"+author.id.toString()+"/messages/to/"+sendTo.id.toString(), {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IlRlc3QiLCJpYXQiOjE2NTg0MTg2OTUsImV4cCI6MTY4OTk3NjI5NX0.yR-oV71SScGAPay2wOUuRqJVmvrigd9Nna1MYnUY10YpI92n3jZIW49SgO0sMKsUSz9WR63A5GTmxG82wCq8TQ',
+                    }
+                })  ;
+                const data = await res.json() ;
+                console.log(data) ;
+                setMessages(data);
+                if(data.length > messages.length) {
+                    setNewMessage(true) ;
+                }
+            } catch (e) {
+                console.error(e) ;
+            }
+
+        }
     } ;
     const confirmEdit = () => {
         fetch(`http://localhost:4000/api/users/1/messages/${messageToEdit.id}`,{
@@ -209,6 +216,17 @@ export default function Chat() {
        return await res.json() ;
     } ;
 
+    const getFriends = async (id) => {
+        const res = await fetch("http://localhost:4000/friends/" +id, {
+            method: 'GET',
+        })  ;
+        return await res.json() ;
+    };
+
+    const setSender = async (friend) => {
+        getUserById(friend.id).then(setSendTo) ;
+    };
+
     const addMessageMenuRef = (elm, key) => {
         if(elm &&  !messageMenuRef.current.includes(elm))
             messageMenuRef.current[key] = elm;
@@ -259,17 +277,26 @@ export default function Chat() {
     const [friendList, setFriendList] = useState() ;
 
    useEffect( ()=>{
-        getUserById(1).then(setAuthor) ;
-        getUserById(2).then(setSendTo) ;
+        getUserById(1).then(setAuthor);
+        getUserById(2).then(setSendTo);
+        getFriends(1).then((data) =>{
+            const friends = [] ;
+            for(const friend of data) {
+                getUserById(friend.friend_id).then((f)=> {friends.push(f)}) ;
+            }
+            setFriendList(friends) ;
+        });
     },[]) ;
+
+    useEffect(()=>{
+        getMessages();
+        const timer = setInterval(getMessages, 1000 * 5);
+        return () => clearInterval(timer);
+    },[sendTo]) ;
 
     useEffect(()=> {
         if(premierMessage)
             getMessages();
-        else {
-            const timer = setInterval(getMessages, 1000 * 5);
-            return () => clearInterval(timer);
-        }
     },[premierMessage, newMessage]) ;
     useEffect(() => {
         if(premierMessage === true)  {
@@ -302,37 +329,16 @@ export default function Chat() {
                 </Grid>
                 <Grid container className={classes.chatSection}>
                     <Grid item xs={3} className={classes.borderRight500}>
-                        <List>
-                            <ListItem button key={"RemySharp"}>
-                                <ListItemIcon>
-                                    <Avatar src="https://material-ui.com/static/images/avatar/1.jpg" ></Avatar>
-                                </ListItemIcon>
-                                <ListItemText primary={"John Do"}></ListItemText>
-                            </ListItem>
-                        </List>
-                        <Divider/>
                         <Grid item xs={12} style={{padding:'10px'}}>  <TextField id="outlined-basic-email" label="Search" variant="outlined" fullWidth /></Grid>
                         <Divider/>
                         <List>
-                            <ListItem button key="RemySharp">
-                                <ListItemIcon>
-                                    <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
-                                </ListItemIcon>
-                                <ListItemText primary="Remy Sharp">Remy Sharp</ListItemText>
-                                <ListItemText secondary="online" align="right"></ListItemText>
-                            </ListItem>
-                            <ListItem button key="Alice">
-                                <ListItemIcon>
-                                    <Avatar alt="Alice" src="https://material-ui.com/static/images/avatar/3.jpg" />
-                                </ListItemIcon>
-                                <ListItemText primary="Alice">Alice</ListItemText>
-                            </ListItem>
-                            <ListItem button key="CindyBaker">
-                                <ListItemIcon>
-                                    <Avatar alt="Cindy Baker" src="https://material-ui.com/static/images/avatar/2.jpg" />
-                                </ListItemIcon>
-                                <ListItemText primary="Cindy Baker">Cindy Baker</ListItemText>
-                            </ListItem>
+                            {
+                                friendList == null ? '' : friendList.map( (friend,key) => {
+                                    return <ListItem style={{backgroundColor: sendTo.id === friend.id ? 'rgb(120,180,232)': ''}} onClick={() => setSender(friend)} button key={key}>
+                                        <ListItemText primary={friend.name}/>
+                                    </ListItem>
+                                })
+                            }
                         </List>
                     </Grid>
                     <Grid item xs={9}>
@@ -358,11 +364,11 @@ export default function Chat() {
                                     else
                                         if (message.is_updated)
                                             return <ListItem  key={message.id}>
-                                                <Grid container style={{justifyContent: message.authorId === 1 ? 'flex-end' : ''}} >
+                                                <Grid container style={{justifyContent: message.authorId === author.id ? 'flex-end' : ''}} >
                                                         {
-                                                            message.authorId === 1 ?
-                                                                <Grid className={message.authorId === 1 ? classes.messageFromAuthor : classes.messageFromSender}  style={{display: "flex" ,alignItems:'center' , flexDirection: 'row-reverse', flex:'initial'}} item xs={12} onMouseLeave={() => hideButton(key)} onMouseOver={() => displayButton(key)}>
-                                                                    <ListItemText style={{flex:'initial', paddingLeft:'10px'}}  align={ message.authorId === 1 ? 'right' : 'left'} primary={message.text} secondary={'modifié'}  />
+                                                            message.authorId === author.id ?
+                                                                <Grid className={message.authorId === author.id ? classes.messageFromAuthor : classes.messageFromSender}  style={{display: "flex" ,alignItems:'center' , flexDirection: 'row-reverse', flex:'initial'}} item xs={12} onMouseLeave={() => hideButton(key)} onMouseOver={() => displayButton(key)}>
+                                                                    <ListItemText style={{flex:'initial', paddingLeft:'10px'}}  align={ message.authorId === author.id ? 'right' : 'left'} primary={message.text} secondary={'modifié'}  />
                                                                     <div style={{ display: 'none ', flexDirection:'row-reverse', alignItems:'center'}} key={key} ref={(ref) => addMessageMenuRef(ref,key)}>
                                                                         <IconButton onClick={() => displayButtonGroup(key)}  size={"small"}  style={{ alignItems:'center' , justifyContent: 'center' , background: '#F5F5F' }}  aria-label="menu"  color="primary" component="label">
                                                                             <MoreVertIcon />
@@ -378,8 +384,8 @@ export default function Chat() {
                                                                     </div>
                                                                 </Grid>
                                                                 :
-                                                                <Grid className={message.authorId === 1 ? classes.messageFromAuthor : classes.messageFromSender}  style={{display: "flex", alignItems:'center' , flexDirection: 'row', flex:'initial'}}  item xs={12} onMouseLeave={() => hideButton(key)} onMouseOver={() => displayButton(key)}>
-                                                                    <ListItemText  align={ message.authorId === 1 ? 'right' : 'left'} primary={message.text} secondary={'modifié'} />
+                                                                <Grid className={message.authorId === author.id ? classes.messageFromAuthor : classes.messageFromSender}  style={{display: "flex", alignItems:'center' , flexDirection: 'row', flex:'initial'}}  item xs={12} onMouseLeave={() => hideButton(key)} onMouseOver={() => displayButton(key)}>
+                                                                    <ListItemText  align={ message.authorId === author.id ? 'right' : 'left'} primary={message.text} secondary={'modifié'} />
                                                                     <div style={{ display: 'none ', flexDirection:'row', alignItems:'center'}} key={key} ref={(ref) => addMessageMenuRef(ref,key)}>
                                                                         <IconButton onClick={() => displayButtonGroup(key)}  size={"small"}  style={{ alignItems:'center' , justifyContent: 'center' , background: '#F5F5F' }}  aria-label="menu"  color="primary" component="label">
                                                                             <MoreVertIcon />
@@ -396,11 +402,11 @@ export default function Chat() {
                                              </ListItem>
                                         else {
                                             return <ListItem   key={message.id}>
-                                                <Grid container style={{justifyContent: message.authorId === 1 ? 'flex-end' : ''}}>
+                                                <Grid container style={{justifyContent: message.authorId === author.id ? 'flex-end' : ''}}>
                                                     {
-                                                        message.authorId === 1 ?
-                                                            <Grid className={message.authorId === 1 ? classes.messageFromAuthor : classes.messageFromSender}  style={{display: "flex", alignItems:'center' , justifyContent:'flex-end', flexDirection: 'row-reverse', flex:'initial'}}  item xs={12} onMouseLeave={() => hideButton(key)} onMouseOver={() => displayButton(key)}>
-                                                                <ListItemText style={{flex:'initial', paddingLeft:'10px'}} align={ message.authorId === 1 ? 'right' : 'left'} primary={message.text} />
+                                                        message.authorId === author.id ?
+                                                            <Grid className={message.authorId === author.id ? classes.messageFromAuthor : classes.messageFromSender}  style={{display: "flex", alignItems:'center' , justifyContent:'flex-end', flexDirection: 'row-reverse', flex:'initial'}}  item xs={12} onMouseLeave={() => hideButton(key)} onMouseOver={() => displayButton(key)}>
+                                                                <ListItemText style={{flex:'initial', paddingLeft:'10px'}} align={ message.authorId === author.id ? 'right' : 'left'} primary={message.text} />
                                                                 <div style={{ display: 'none ',flexDirection:'row-reverse', alignItems:'center'}} key={key} ref={(ref) => addMessageMenuRef(ref,key)}>
                                                                     <IconButton onClick={() => displayButtonGroup(key)}  size={"small"}  style={{ alignItems:'center' , justifyContent: 'center' , background: '#F5F5F' }}  aria-label="menu"  color="primary" component="label">
                                                                         <MoreVertIcon />
@@ -416,8 +422,8 @@ export default function Chat() {
                                                                 </div>
                                                             </Grid>
                                                             :
-                                                            <Grid className={message.authorId === 1 ? classes.messageFromAuthor : classes.messageFromSender} style={{display: "flex",  alignItems:'center' , flexDirection: 'row', flex:'initial'}}  item xs={12} onMouseLeave={() => hideButton(key)} onMouseOver={() => displayButton(key)}>
-                                                                <ListItemText style={{}} align={ message.authorId === 1 ? 'right' : 'left'} primary={message.text} />
+                                                            <Grid className={message.authorId === author.id ? classes.messageFromAuthor : classes.messageFromSender} style={{display: "flex",  alignItems:'center' , flexDirection: 'row', flex:'initial'}}  item xs={12} onMouseLeave={() => hideButton(key)} onMouseOver={() => displayButton(key)}>
+                                                                <ListItemText style={{}} align={ message.authorId === author.id ? 'right' : 'left'} primary={message.text} />
                                                                 <div style={{ display: 'none ', flexDirection:'row', alignItems:'center'}} key={key} ref={(ref) => addMessageMenuRef(ref,key)}>
                                                                     <IconButton onClick={() => displayButtonGroup(key)}  size={"small"}  style={{ alignItems:'center' , justifyContent: 'center' , background: '#F5F5F' }}  aria-label="menu"  color="primary" component="label">
                                                                         <MoreVertIcon />
