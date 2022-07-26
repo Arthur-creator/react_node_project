@@ -48,7 +48,6 @@ export default function Users() {
             <h2>Liste des utilisateurs</h2>
             {
                 users.map(user => {
-                    console.log('user',user)
                     return (
                     <div key={user.name}>
                         <ListItem button key={"RemySharp"}>

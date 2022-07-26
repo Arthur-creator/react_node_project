@@ -11,7 +11,7 @@ export default function Messages() {
     const [messages,setMessages] = useState([])
     const [loading,setLoading] = useState(true)
     useEffect(() => {
-        fetch("http://localhost:4000/api/messages?isReported=true", {
+        fetch("http://localhost:4000/messages", {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6ImF1c2Vjb3VycyIsImlhdCI6MTY1ODY4NTM2MCwiZXhwIjoxNjkwMjQyOTYwfQ.DiPfuOFyoeNYuBKFwQksDC55rTydfMDW8eht-xRrWZm4xykr0Aj0GbtSne7pypGxkDO6tuFVB5SU_Lvyep33Ew',
@@ -21,11 +21,11 @@ export default function Messages() {
             .finally(() => setLoading(false))
     }, [])
 
-    const deleteUser = (user) => {
+    const deleteAdmin = (user) => {
         console.log(user)
     }
 
-    const abortReport = (user) => {
+    const cancelReport = (user) => {
         console.log(user)
     }
 
@@ -46,7 +46,7 @@ export default function Messages() {
                             messages.map( message => (
                                 <TableRow>
                                     <TableCell>{message.author}</TableCell>
-                                    <TableCell>{message.content}</TableCell>
+                                    <TableCell>{message.text}</TableCell>
                                 </TableRow>
                             ))
                         }
