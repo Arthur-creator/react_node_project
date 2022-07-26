@@ -8,8 +8,8 @@ function SkeletonLoader() {
     return (
         <Box sx={{overflowX: "scroll", paddingY: 1}}>
             <Box sx={{display: 'flex', gap: 2, flexWrap: 'nowrap', width: 'max-content'}}>
-                {Array.from({length: 5}).map(() =>
-                    <Stack spacing={1} width="250px">
+                {Array.from({length: 5}).map((_, index) =>
+                    <Stack spacing={1} width="250px" key={`sk-${index}`}>
                         <Stack direction="row" spacing={2}>
                             <Skeleton variant="circular" width={40} height={40}/>
                             <Stack spacing={-0.5}>
@@ -63,18 +63,23 @@ export default function RecommendedFriends({sx}) {
             setLoading(true);
             console.log('fetching recommended friends');
             setRecommendedFriends([{
+                id: 'fze',
                 name: 'Antoine Daniel',
                 class: '4IW1',
             }, {
+                id: 'sdv',
                 name: 'Hans Burger',
                 class: '4IW3',
             }, {
+                id: 'hgj',
                 name: 'Adrien Morin',
                 class: '3IW2',
             }, {
+                id: 'lui',
                 name: 'Adrien Morin',
                 class: '3IW2',
             }, {
+                id: 'xaz',
                 name: 'Adrien Morin',
                 class: '3IW2',
             }]);
@@ -93,7 +98,7 @@ export default function RecommendedFriends({sx}) {
             {loading ? <SkeletonLoader/> :
                 <Box sx={{overflowX: "scroll", paddingY: 1}}>
                     <Box sx={{display: 'flex', gap: 2, flexWrap: 'nowrap', width: 'max-content'}}>
-                        {recommendedFriends.map(user => <RecommendedFriendCard key={user.name} user={user}/>)}
+                        {recommendedFriends.map(user => <RecommendedFriendCard key={user.id} user={user}/>)}
                     </Box>
                 </Box>}
         </Box>
