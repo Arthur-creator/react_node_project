@@ -53,6 +53,7 @@ const useStyles = makeStyles({
 export default function Chat() {
 
     const {user} = useContext(UserContext);
+    console.log(user) ;
 
     /* FUNCTIONS */
     const sendMessage = () => {
@@ -115,7 +116,7 @@ export default function Chat() {
                 const res = await fetch("http://localhost:4000/api/users/"+author.id.toString()+"/messages/to/"+sendTo.id.toString(), {
                     method: 'GET',
                     headers: {
-                        'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IlRlc3QiLCJpYXQiOjE2NTg0MTg2OTUsImV4cCI6MTY4OTk3NjI5NX0.yR-oV71SScGAPay2wOUuRqJVmvrigd9Nna1MYnUY10YpI92n3jZIW49SgO0sMKsUSz9WR63A5GTmxG82wCq8TQ',
+                        'Authorization': 'Bearer ' + user?.accessToken ?? localStorage.getItem('token'),
                     }
                 })  ;
                 const data = await res.json() ;
@@ -133,7 +134,7 @@ export default function Chat() {
         fetch(`http://localhost:4000/api/users/${author.id}/messages/${messageToEdit.id}`,{
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IlRlc3QiLCJpYXQiOjE2NTg0MTg2OTUsImV4cCI6MTY4OTk3NjI5NX0.yR-oV71SScGAPay2wOUuRqJVmvrigd9Nna1MYnUY10YpI92n3jZIW49SgO0sMKsUSz9WR63A5GTmxG82wCq8TQ',
+                'Authorization': 'Bearer ' + user?.accessToken ?? localStorage.getItem('token'),
                 'Content-type': 'application/json',
             },
             body: JSON.stringify({
@@ -165,7 +166,7 @@ export default function Chat() {
         fetch(`http://localhost:4000/api/users/${author.id}/messages/${message.id}`, {
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IlRlc3QiLCJpYXQiOjE2NTg0MTg2OTUsImV4cCI6MTY4OTk3NjI5NX0.yR-oV71SScGAPay2wOUuRqJVmvrigd9Nna1MYnUY10YpI92n3jZIW49SgO0sMKsUSz9WR63A5GTmxG82wCq8TQ',
+                'Authorization': 'Bearer ' + user?.accessToken ?? localStorage.getItem('token'),
                 'Content-type': 'application/json'
             },
             body: JSON.stringify({
@@ -186,10 +187,10 @@ export default function Chat() {
     };
 
     const reportMessage = (key,message) => {
-        fetch(`http://localhost:4000/api/users/2/messages/${message.id}`, {
+        fetch(`http://localhost:4000/api/users/${sendTo.id}/messages/${message.id}`, {
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IlRlc3QiLCJpYXQiOjE2NTg0MTg2OTUsImV4cCI6MTY4OTk3NjI5NX0.yR-oV71SScGAPay2wOUuRqJVmvrigd9Nna1MYnUY10YpI92n3jZIW49SgO0sMKsUSz9WR63A5GTmxG82wCq8TQ',
+                'Authorization': 'Bearer ' + user?.accessToken ?? localStorage.getItem('token'),
                 'Content-type': 'application/json'
             },
             body: JSON.stringify({
@@ -286,7 +287,7 @@ export default function Chat() {
             }
             setFriendList(friends) ;
         });
-    },[]) ;
+    },[user]) ;
 
     useEffect(()=>{
         getMessages();

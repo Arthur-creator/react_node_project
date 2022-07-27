@@ -11,7 +11,7 @@ module.exports = (req, res, next) => {
   }
   const user = verifyToken(token);
   if (!user) {
-    return res.sendStatus(401);
+   // return res.sendStatus(401);
   }
   req.user = user;
   next();

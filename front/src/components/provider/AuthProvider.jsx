@@ -63,6 +63,7 @@ const UserProvider = ({children}) => {
 
     const setUserInfo = (info) => {
         setUser(info) ;
+        localStorage.setItem('token', info.accessToken) ;
         localStorage.setItem('user-access-token',info.id) ;
     };
 
