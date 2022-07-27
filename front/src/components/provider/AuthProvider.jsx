@@ -63,8 +63,14 @@ const UserProvider = ({children}) => {
 
     const setUserInfo = (info) => {
         setUser(info) ;
-        localStorage.setItem('token', info.accessToken) ;
-        localStorage.setItem('user-access-token',info.id) ;
+        if (info === null) {
+            localStorage.removeItem("user-access-token");
+            localStorage.removeItem("token");
+        }
+        else {
+            localStorage.setItem('token', info.accessToken) ;
+            localStorage.setItem('user-access-token',info.id) ;
+        }
     };
 
     return loader === false ? <UserContext.Provider value={{ user, setUserInfo }}>{children}</UserContext.Provider> : 'Loading...'
