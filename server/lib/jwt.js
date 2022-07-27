@@ -1,5 +1,11 @@
 const jwt = require("jsonwebtoken");
 
+exports.generateAccessToken = (user) => {
+  return jwt.sign({ id: user.id, isAdmin: user.isAdmin }, "mySecretKey", {
+    expiresIn: "5s",
+  });
+};
+
 exports.generateRefreshToken = (user) => {
   return jwt.sign({ id: user.id, isAdmin: user.isAdmin }, "myRefreshSecretKey");
 };
