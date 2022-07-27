@@ -1,6 +1,5 @@
-import {useRole, hasPermission} from "../components/utils/Permission";
+import {hasPermission, useRole} from "../components/utils/Permission";
 import {PERMISSIONS} from "../utils/permissions-map";
-import {Navigate} from "react-router-dom";
 import {useContext} from "react";
 import {UserContext} from "../components/provider/AuthProvider";
 
