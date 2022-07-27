@@ -14,14 +14,16 @@ const MessageSchema = new mongoose.Schema({
     author: {
         id: Number,
         email: String,
-        name: String,
+        firstname: String,
+        lastname: String,
         is_admin: Boolean,
         createdAt: Date
     },
     sendTo: {
         id: Number,
         email: String,
-        name: String,
+        firstname: String,
+        lastname: String,
         is_admin: Boolean,
         createdAt: Date
     }

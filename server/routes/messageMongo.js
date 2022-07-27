@@ -12,7 +12,7 @@ const errors = (validationError) => {
 
 router.get('/',async(req,res)=>{
     try{
-        const messages = await Message.findAll(req.query) ;
+        const messages = await Message.find({...req.query,is_deleted:false, is_reported:true,is_moderated:false}) ;
         res.json(messages) ;
     }catch (e) {
         console.error(e);
