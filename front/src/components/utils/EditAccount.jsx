@@ -24,7 +24,6 @@ export const EditAccount = () => {
             firstname: user ? user.firstname : "",
             lastname: user ? user.lastname : "",
             age: user ? user.age : "",
-            email: user ? user.email : "",
             password: ""
         })
     }, [user])
@@ -44,7 +43,6 @@ export const EditAccount = () => {
         if (initialValues.password === "") {
             delete initialValues.password;
         }
-        console.log(initialValues)
         fetch('http://localhost:4000/api/'+userUrl, {
             method: 'PUT',
             headers: {
@@ -72,9 +70,6 @@ export const EditAccount = () => {
                 </Grid>
                 <Grid item xs={12} padding={3}>
                     <TextField label="Age" name="age" variant="outlined" fullWidth value={initialValues.age} onChange={newValue => editField(newValue)}/>
-                </Grid>
-                <Grid item xs={12} padding={3}>
-                    <TextField label="Email" name="email" variant="outlined" fullWidth value={initialValues.email} onChange={newValue => editField(newValue)}/>
                 </Grid>
                 <Grid item xs={12} padding={3}>
                     <TextField type="password" label="Password" name="password" variant="outlined" fullWidth value={initialValues.password} onChange={newValue => editField(newValue)}/>

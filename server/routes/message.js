@@ -29,18 +29,6 @@ router.get('/users/:id/messages', async (req,res) => {
 router.get('/users/:uid/messages/to/:id', async (req,res) => {
     try {
         const messages = await Message.findAll({
-            /*where: {
-                $or: [
-                    {
-                        authorId : {$eq: req.params.uid},
-                        sendToId : {$eq: req.params.id}
-                    },
-                    {
-                        authorId : {$eq: req.params.id},
-                        sendToId : {$eq: req.params.uid}
-                    }
-                ]
-            } ,*/
             where: {
                 [Op.or] : [
                     {
