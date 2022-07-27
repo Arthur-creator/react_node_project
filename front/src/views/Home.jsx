@@ -8,7 +8,8 @@ import ProfilePicture from "../components/ProfilePicture";
 
 
 
-function UserCard({user}) {
+function UserCard({userData}) {
+    const {user} = useContext(UserContext);
     return (
         <Card sx={{ width: "390px" }}>
             <CardContent>
@@ -18,10 +19,10 @@ function UserCard({user}) {
                     gap: 2,
                     marginBottom: 2,
                 }}>
-                    <ProfilePicture name={`${user.firstname} ${user.lastname}`} />
+                    <ProfilePicture name={`${userData.firstname} ${userData.lastname}`} />
                     <Box>
-                        <Typography variant="h6" component="div">{user.firstname} {user.lastname}</Typography>
-                        <Typography color="text.secondary">{user.class}</Typography>
+                        <Typography variant="h6" component="div">{userData.firstname} {userData.lastname}</Typography>
+                        <Typography color="text.secondary">{userData.class}</Typography>
                     </Box>
                 </Box>
                 <Typography variant="body2">
@@ -29,12 +30,13 @@ function UserCard({user}) {
                 </Typography>
             </CardContent>
             <CardActions>
-                <AddFriendButton />
+                <AddFriendButton sourceId={user.id} targetId={userData.id} />
             </CardActions>
         </Card>
     )
 }
 function UserList() {
+    const {user} = useContext(UserContext);
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
@@ -52,7 +54,10 @@ function UserList() {
 
     return (
         <Box sx={{display: 'flex', gap: 2}}>
-            {users.map(user => <UserCard key={user.id} user={user} />)}
+            {users.map(item => {
+                if (user.id === item.id) return <></>;
+                return <UserCard key={item.id} userData={item} />
+            })}
         </Box>
     )
 }
