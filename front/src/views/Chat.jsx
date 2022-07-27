@@ -60,7 +60,7 @@ export default function Chat() {
         fetch("http://localhost:4000/api/users/"+author.id+"/messages",{
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IlRlc3QiLCJpYXQiOjE2NTg0MTg2OTUsImV4cCI6MTY4OTk3NjI5NX0.yR-oV71SScGAPay2wOUuRqJVmvrigd9Nna1MYnUY10YpI92n3jZIW49SgO0sMKsUSz9WR63A5GTmxG82wCq8TQ',
+                'Authorization': 'Bearer ' + user?.accessToken ?? localStorage.getItem('token') ,
                 'Content-type': 'application/json',
             },
             body: JSON.stringify({
