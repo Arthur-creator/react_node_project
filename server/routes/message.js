@@ -2,7 +2,6 @@ const { Router } = require("express");
 const { Message } = require('../models/postgres') ;
 const { ValidationError, Op } = require("sequelize");
 
-
 const router = new Router() ;
 
 // GET all messages send by one user
