@@ -47,14 +47,10 @@ export default function Users() {
         <>
             <h2>Liste des utilisateurs</h2>
             {
-                users.map(user => {
-                    console.log('user',user)
+                users.map((user,key) => {
                     return (
                     <div key={user.name}>
-                        <ListItem button key={"RemySharp"}>
-                            {/*<ListItemIcon>*/}
-                            {/*    <Avatar src={user.picture} alt={user.name}/>*/}
-                            {/*</ListItemIcon>*/}
+                        <ListItem button key={key}>
                             <ListItemText>{user.name}</ListItemText>
                             <ListItemText>{user.email}</ListItemText>
                             <IconButton aria-label="Example" onClick={deleteUser}>
