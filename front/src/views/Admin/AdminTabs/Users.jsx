@@ -19,7 +19,7 @@ export default function Users() {
         fetch("http://localhost:4000/api/users", {
             method: 'GET',
             headers: {
-                'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6ImF1c2Vjb3VycyIsImlhdCI6MTY1ODY4NTM2MCwiZXhwIjoxNjkwMjQyOTYwfQ.DiPfuOFyoeNYuBKFwQksDC55rTydfMDW8eht-xRrWZm4xykr0Aj0GbtSne7pypGxkDO6tuFVB5SU_Lvyep33Ew',
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 'Content-type': 'application/json',
             }
         }).then(res => res.json())
@@ -31,7 +31,7 @@ export default function Users() {
         fetch("http://localhost:4000/api/users/"+user.id, {
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6ImF1c2Vjb3VycyIsImlhdCI6MTY1ODY4NTM2MCwiZXhwIjoxNjkwMjQyOTYwfQ.DiPfuOFyoeNYuBKFwQksDC55rTydfMDW8eht-xRrWZm4xykr0Aj0GbtSne7pypGxkDO6tuFVB5SU_Lvyep33Ew',
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 'Content-type': 'application/json',
             },
             body: JSON.stringify({
@@ -54,10 +54,9 @@ export default function Users() {
         <>
             <h2>Liste des utilisateurs</h2>
             {
-                users.map(user => {
-                    console.log('user',user)
+                users.map((user,key) => {
                     return (
-                    <div key={user.name}>
+                    <div key={key}>
                         <ListItem button key={"RemySharp"}>
                             <ListItemText>{user.firstname}</ListItemText>
                             <ListItemText>{user.lastname}</ListItemText>

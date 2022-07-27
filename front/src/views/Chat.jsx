@@ -83,7 +83,8 @@ export default function Chat() {
                         'author' : {
                             id: author.id,
                             email: author.email,
-                            name: author.name,
+                            firstname: author.firstname,
+                            lastname: author.lastname,
                             is_admin: author.is_admin,
                             createdAt: author.createdAt
                         },
