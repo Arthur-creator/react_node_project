@@ -47,7 +47,7 @@ app.use('/',GetUserRouter) ;
 
 app.use('/messages',MessageMongoRouter) ;
 
-app.use('/analytiques/messages', verifyToken, MessageAnaylitcsRouter) ;
+app.use('/analytiques/messages', MessageAnaylitcsRouter) ;
 
 app.listen(process.env.PORT, () => {
     console.log("Server is listening on port " + process.env.PORT);
