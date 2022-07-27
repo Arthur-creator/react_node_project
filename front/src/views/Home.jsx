@@ -60,7 +60,6 @@ function UserList() {
 
 export default function Home({ title }) {
     const { user } = useContext(UserContext);
-    console.log(user);
     return (
         <>
             <h1>Welcome to Techie!</h1>

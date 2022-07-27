@@ -1,12 +1,39 @@
 import {Button, TextField} from "@material-ui/core";
-import {Grid} from "@mui/material";
+import {FormControl, Grid, OutlinedInput, Select, Stack} from "@mui/material";
 import {useEffect, useState} from "react";
+import MenuItem from "@mui/material/MenuItem";
 
 export const EditAccount = () => {
     const userUrl = window.location.pathname;
     const [user,setUser] = useState({});
     const [loading,setLoading] = useState(true);
     const [initialValues,setInitialValues] = useState({});
+    const ITEM_HEIGHT = 48;
+    const ITEM_PADDING_TOP = 8;
+    const MenuProps = {
+        PaperProps: {
+            style: {
+                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+                width: 250,
+            },
+        },
+    };
+    const proposedTechnologies =  ["adonisjs", "aftereffects", "amazonwebservices", "android", "androidstudio", "aarch64", "angularjs",
+        "ansible",    "apache",
+        "apachekafka",
+        "appcelerator",
+        "apple",
+        "appwrite",
+        "arduino",
+        "atom",
+        "azure",
+        "babel",
+        "backbonejs",
+        "bamboo",
+        "dropwizard",
+        "vuetify",
+        "fedora"
+    ] ;
 
     useEffect(() => {
         fetch('http://localhost:4000/api/'+userUrl, {
@@ -46,16 +73,29 @@ export const EditAccount = () => {
         fetch('http://localhost:4000/api/'+userUrl, {
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6ImF1c2Vjb3VycyIsImlhdCI6MTY1ODY4NTM2MCwiZXhwIjoxNjkwMjQyOTYwfQ.DiPfuOFyoeNYuBKFwQksDC55rTydfMDW8eht-xRrWZm4xykr0Aj0GbtSne7pypGxkDO6tuFVB5SU_Lvyep33Ew',
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-               ...initialValues
+               ...initialValues,
+                'technos': personName.join('0')
             })
         }).then(res => res.json())
             .then(data => setUser(data))
             .finally(() => console.log("done"))
     }
+
+    const [personName, setPersonName] = useState([]);
+
+    const handleChange = (event) => {
+        const {
+            target: { value },
+        } = event;
+        setPersonName(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+    };
 
     return (
         !loading &&
@@ -74,6 +114,37 @@ export const EditAccount = () => {
                 <Grid item xs={12} padding={3}>
                     <TextField type="password" label="Password" name="password" variant="outlined" fullWidth value={initialValues.password} onChange={newValue => editField(newValue)}/>
                 </Grid>
+
+                <Grid item xs={12} padding={3}>
+                    <div>
+                        <FormControl sx={{ m: 15, width: 300, mt: 3 }}>
+                            <Select
+                                multiple
+                                displayEmpty
+                                value={personName}
+                                onChange={handleChange}
+                                input={<OutlinedInput />}
+                                renderValue={(selected) => {
+                                    if (selected.length === 0) {
+                                        return <em>Choisir ses technologies préférées</em>;
+                                    }
+                                    return selected.join(', ');
+                                }}
+                                inputProps={{ 'aria-label': 'Without label' }}
+                            >
+                                    <MenuItem disabled value="">
+                                        <em>Choisir ses technologies préférées</em>
+                                    </MenuItem>
+                                    {proposedTechnologies.map((name) => (
+                                        <MenuItem  style={{fontWeight:'500px'}}  key={name}  value={name}>
+                                            {name}
+                                        </MenuItem>
+                                    ))}
+                            </Select>
+                        </FormControl>
+                    </div>
+                </Grid>
+
                 <Button variant="contained" onClick={sendData}>Envoyer</Button>
             </Grid>
         </>

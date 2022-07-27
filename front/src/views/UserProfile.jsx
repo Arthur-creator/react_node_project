@@ -27,22 +27,17 @@ export default function UserProfile () {
                                     { user.age !== null ? <Typography>{user.age} ans </Typography> : ''}
                                 </div>
                                 <Divider/>
-                                <div style={{display:"flex", alignItems:'center', justifyContent:"center" , flexDirection:'column'}}>
-                                    <Typography style={{marginTop:'15px'}}>Liste d'amis</Typography>
-                                    <Grid item xs={12} style={{padding:'10px'}}>  <TextField id="outlined-basic-email" label="Search" variant="outlined" fullWidth /></Grid>
-                                    <Divider/>
-                                </div>
                             </List>
                         </Grid>
                         <Divider/>
                         <Grid item xs={9}>
                             <List>
                                 <Typography>Technologies favorites</Typography>
-                                {technologies?.length>0 ? technologies.map( (techno) => {
-                                    return <Grid key={techno.name}>
+                                {user?.technos.split('0')?.length>0 ? user?.technos.split('0').map( (techno) => {
+                                    return <Grid>
                                         <ListItem>
-                                            <img width={50} height={50}  alt={'Image de ' + techno.name} src={techno.url} />
-                                            <ListItemText primary={techno.name}/>
+                                            <img width={50} height={50}  alt={'Image de ' + techno} src={"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/"+techno+"/"+techno+"-original.svg"} />
+                                            <ListItemText primary={techno}/>
                                         </ListItem>
                                     </Grid>
 

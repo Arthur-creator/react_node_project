@@ -1,6 +1,9 @@
 const { Router } = require("express");
 const { User } = require("../models/postgres");
 const { Op } =  require("sequelize");
+const { User, Friends} = require("../models/postgres");
+const { ValidationError, Op } = require("sequelize");
+
 
 const router = new Router();
 
@@ -52,7 +55,5 @@ router.get("/users/:id", async (req, res) => {
         console.error(error);
     }
 });
-
-
 
 module.exports = router;

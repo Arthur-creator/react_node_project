@@ -53,6 +53,10 @@ User.init(
       nombreReported: {
         type: DataTypes.INTEGER,
         allowNull: true
+      },
+      technos: {
+        type: DataTypes.STRING,
+          allowNull:true
       }
     // raisonReport: {
     //   type: DataTypes.ARRAY(DataTypes.STRING),
