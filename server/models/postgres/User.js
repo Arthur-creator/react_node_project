@@ -19,9 +19,26 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    name: {
+    firstname: {
       type: DataTypes.STRING,
+      allowNull: true,
+    },
+    lastname: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    age: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
+    isVerified: {
+      type: DataTypes.BOOLEAN,
       allowNull: false,
+      defaultValue: false,
+    },
+    confirmationCode: {
+      type: DataTypes.STRING,
+      unique: true
     },
     isAdmin: {
       type: DataTypes.BOOLEAN,

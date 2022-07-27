@@ -4,16 +4,19 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
-    "d:s:u": "node migrate.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "migrate": "node migrate.js"
   },
   "author": "",
   "license": "UNLICENSED",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
     "express": "^4.18.1",
+    "express-validator": "^6.14.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.4.3",
+    "nodemailer": "^6.7.7",
     "pg": "^8.7.3",
     "sequelize": "^6.21.2",
     "winston": "^3.8.1"

@@ -5,9 +5,12 @@ import Home from "../views/Home";
 import NotFound from "../views/NotFound";
 import RouterView from "./RouterView";
 import Login from "../views/Login";
-import Chat from "../views/Chat" ;
+import Chat from "../views/Chat";
 import Admin from "../views/Admin/Admin";
 import {EditAccount} from "../components/utils/EditAccount";
+import Register from "../views/Register";
+import AccountConfirmation from "../views/AccountConfirmation";
+import UserProfile from '../views/UserProfile' ;
 
 //hook that return a list of routes
 export const useRoutes = () => {
@@ -16,9 +19,17 @@ export const useRoutes = () => {
             name: 'home',
             path: '/',
             element:
-                <RouterView>
+                <RouterView scopes={[SCOPES.canView]}>
                     <Home title="Home"/>
                 </RouterView>,
+        },
+        {
+            name:'userProfile',
+            path: '/profile',
+            element:  <RouterView scopes={[SCOPES.canView]}>
+                <UserProfile/>
+            </RouterView>,
+            meta: {}
         },
         {
             name: 'login',
@@ -34,7 +45,23 @@ export const useRoutes = () => {
             element:
                 <RouterView>
                     <Chat/>
-                </RouterView>
+                </RouterView>,
+        },
+        {
+            name: 'register',
+            path: '/register',
+            element:
+                <RouterView>
+                    <Register/>
+                </RouterView>,
+        },
+        {
+            name: 'confirm',
+            path: '/confirm/:confirmationCode',
+            element:
+                <RouterView>
+                    <AccountConfirmation/>
+                </RouterView>,
         },
         {
             name: 'notFound',
@@ -68,9 +95,11 @@ export default function Router() {
     const routes = useRoutes();
     return (
         <Suspense fallback={<div>Loading...</div>}>
-            <Routes>
-                {routes.map(route => route)}
-            </Routes>
+
+                <Routes>
+                    {routes.map(route => route)}
+                </Routes>
+
         </Suspense>
     )
 }

@@ -11,13 +11,18 @@ GET http://localhost:4000/api/users/7
 Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywibmFtZSI6IlRlc3QiLCJpYXQiOjE2NTg0MTIzOTcsImV4cCI6MTY4OTk2OTk5N30.rDBL894r4AeE3flE7LULdAST4e3ZTVlgthjEBoRdeU0XWvdXET9pi3ECsoU74CtE8klectIFX7CYmsesCQ75tg
 
 ###
+GET http://localhost:4000/api/users/8
+Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywibmFtZSI6IlRlc3QiLCJpYXQiOjE2NTY1NzI5NzIsImV4cCI6MTY4ODEzMDU3Mn0.aMFNb1hEWujdluywNN0M68oCeERJRWvbKrKS9zup-U8i3j_Do_Ryl7flIMKcj38KpOfSwVL2PwDH1N3iaoyxBw
+
+###
 POST http://localhost:4000/api/users
 Content-Type: application/json
 
 {
     "email": "ok@ok.com",
     "password": "dsfcsdvcsd",
-    "name": "Test"
+    "firstname": "Test",
+    "lastname": "Test"
 }
 
 ###
@@ -33,7 +38,7 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywibmFtZSI6I
 
 
 ###
-DELETE http://localhost:3000/api/users/1
+DELETE http://localhost:4000/api/users/1
 
 ###
 #$2a$10$Et1Q531C6n9GDG4DqJnP9e26rLl109O.EaFlxfS9pTtQ6kkiLftsG
@@ -41,9 +46,11 @@ POST http://localhost:4000/register
 Content-Type: application/json
 
 {
-    "email": "Aleeeexb@ok.com",
-    "password": "test",
-    "name": "Test"
+    "email": "ok4@ok.com",
+    "password": "dsfcsdvcsd",
+    "confirmPassword": "dsfcsdvcsd",
+    "firstname": "John",
+    "lastname": "Doe"
 }
 
 ###
