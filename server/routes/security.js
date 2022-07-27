@@ -11,6 +11,17 @@ const {generateAccessToken, generateRefreshToken} = require("../lib/jwt");
 
 let refreshTokens = [];
 
+router.get('/user/by/:id',async (req,res) => {
+  try {
+    const user = await User.findOne({ where: {id : req.params.id} }) ;
+    if(!user)
+      res.status(404) ;
+    else res.json(user) ;
+  } catch(error) {console.error(error); res.sendStatus(500) ;}
+
+
+}) ;
+
 router.post("/refresh", (req, res) => {
   //take the refresh token from the user
   const refreshToken = req.body.token;
@@ -65,6 +76,7 @@ router.post("/login", async (req, res) => {
     const refreshToken = generateRefreshToken(user);
     refreshTokens.push(refreshToken);
     res.status(200).json({
+      id: user.id,
       firstname: user.firstname,
       lastname: user.lastname,
       email: user.email,

@@ -21,11 +21,15 @@ User.init(
     },
     firstname: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     lastname: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
+    },
+    age: {
+        type: DataTypes.INTEGER,
+        allowNull: true
     },
     isVerified: {
       type: DataTypes.BOOLEAN,

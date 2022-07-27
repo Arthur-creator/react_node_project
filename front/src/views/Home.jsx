@@ -1,7 +1,12 @@
 import Permission from "../components/utils/Permission";
 import {SCOPES} from "../utils/permissions-map";
+import {useContext} from "react";
+import {UserContext} from "../components/provider/AuthProvider";
 
 export default function Home({title}) {
+
+    const {user} = useContext(UserContext) ;
+    console.log(user) ;
     return (
         <>
             <h1>{title}</h1>

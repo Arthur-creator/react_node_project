@@ -1,6 +1,7 @@
 import {PERMISSIONS} from "../../utils/permissions-map";
 import {useContext} from "react";
-import {UserContext} from "../../App";
+import {UserContext} from "../provider/AuthProvider";
+
 
 // Custom hook that returns the role of the user
 export const useRole = (user) => {

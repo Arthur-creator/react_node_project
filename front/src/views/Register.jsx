@@ -93,7 +93,7 @@ export default function SignUp() {
                     }}
                 >
                     {message && <Snackbar onClose={handleClose} autoHideDuration={6000} open={open}><Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>{message}</Alert></Snackbar>}
-                    {errors.map((error, key) => {
+                    {errors?.map((error, key) => {
                         return <Snackbar onClose={handleClose} key={key} autoHideDuration={6000} open={open}><Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>{error.param} : {error.msg}</Alert></Snackbar>
                     }
                     )}

@@ -6,7 +6,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {loginUser} from "../services/AuthService";
 import {useNavigate} from "react-router-dom";
 import {useContext} from "react";
-import {UserContext} from "../App";
+import {UserContext} from "../components/provider/AuthProvider";
+
 
 export default function Login() {
 
@@ -16,7 +17,7 @@ export default function Login() {
     const [open, setOpen] = React.useState(false);
     const [severity, setSeverity] = React.useState('');
     const navigate = useNavigate();
-    const { user, setUser } = useContext(UserContext);
+    const  {setUserInfo}  = useContext(UserContext);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -24,11 +25,11 @@ export default function Login() {
             email: event.target.email.value,
             password: event.target.password.value,
         };
-        loginUser(user).then(response => {
-            setUser(response);
+        loginUser(user).then((response) => {
+            setUserInfo(response);
             navigate('/');
         }).catch(error => {
-            if (error.response.data.message) {
+            if (error?.response?.data?.message) {
                 setMessage(error.response.data.message);
             }
             setSeverity('error');
