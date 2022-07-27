@@ -15,6 +15,9 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import {Link} from "@mui/material";
+import {useContext} from "react";
+import {UserContext} from "../provider/AuthProvider";
+import {useNavigate} from "react-router-dom";
 
 const Search = styled('div')(({theme}) => ({
     position: 'relative',
@@ -46,7 +49,6 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
     color: 'inherit',
     '& .MuiInputBase-input': {
         padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
         paddingLeft: `calc(1em + ${theme.spacing(4)})`,
         transition: theme.transitions.create('width'),
         width: '100%',
@@ -62,6 +64,10 @@ export default function PrimarySearchAppBar() {
 
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+    const {user} = useContext(UserContext);
+
+    const navigate = useNavigate();
 
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -80,6 +86,11 @@ export default function PrimarySearchAppBar() {
         setMobileMoreAnchorEl(event.currentTarget);
     };
 
+    const handleRedirectMenu = (route) => {
+        navigate(route);
+        handleMenuClose()
+    }
+
     const menuId = 'primary-search-account-menu';
     const renderMenu = (
         <Menu
@@ -97,8 +108,7 @@ export default function PrimarySearchAppBar() {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-            <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+            <MenuItem onClick={() => handleRedirectMenu('/profile')}>My Account</MenuItem>
             <MenuItem onClick={handleMenuClose}>Log out</MenuItem>
         </Menu>
     );
@@ -178,6 +188,23 @@ export default function PrimarySearchAppBar() {
                             inputProps={{'aria-label': 'search'}}
                         />
                     </Search>
+                    <Link onClick={() => navigate('/chat')} style={{cursor:"pointer"}}>
+                        <Typography
+                            color="white"
+                            padding={2}
+                        >
+                            Messages
+                        </Typography>
+                    </Link>
+                    {
+                        user.isAdmin === true &&
+                        <Link onClick={() => navigate('/admin')} style={{cursor:"pointer"}}>
+                            <Typography
+                                color="white">
+                                Admin
+                            </Typography>
+                        </Link>
+                    }
                     <Box sx={{flexGrow: 1}}/>
                     <Box sx={{display: {xs: 'none', md: 'flex'}}}>
                         <IconButton size="large" aria-label="show 4 new mails" color="inherit">

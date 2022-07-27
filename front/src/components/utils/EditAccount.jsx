@@ -21,7 +21,9 @@ export const EditAccount = () => {
 
     useEffect(() => {
         setInitialValues({
-            name: user ? user.name : "",
+            firstname: user ? user.firstname : "",
+            lastname: user ? user.lastname : "",
+            age: user ? user.age : "",
             email: user ? user.email : "",
             password: ""
         })
@@ -63,7 +65,13 @@ export const EditAccount = () => {
             <h2>Modification de l'utilisateur</h2>
             <Grid container>
                 <Grid item xs={12} padding={3}>
-                    <TextField label="Name" name="name" variant="outlined" fullWidth value={initialValues.name} onChange={newValue => editField(newValue)}/>
+                    <TextField label="Prénom" name="firstname" variant="outlined" fullWidth value={initialValues.firstname} onChange={newValue => editField(newValue)}/>
+                </Grid>
+                <Grid item xs={12} padding={3}>
+                    <TextField label="Nom" name="lastname" variant="outlined" fullWidth value={initialValues.lastname} onChange={newValue => editField(newValue)}/>
+                </Grid>
+                <Grid item xs={12} padding={3}>
+                    <TextField label="Age" name="age" variant="outlined" fullWidth value={initialValues.age} onChange={newValue => editField(newValue)}/>
                 </Grid>
                 <Grid item xs={12} padding={3}>
                     <TextField label="Email" name="email" variant="outlined" fullWidth value={initialValues.email} onChange={newValue => editField(newValue)}/>
