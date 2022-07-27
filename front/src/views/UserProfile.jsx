@@ -1,23 +1,16 @@
 import {UserContext} from "../components/provider/AuthProvider";
 import {useContext, useState} from "react";
-import {Button, Divider, Grid, IconButton, List, ListItem, ListItemText, TextField} from "@mui/material";
+import {Divider, Grid, List, ListItem, ListItemText, TextField, Box} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import PersonIcon from '@mui/icons-material/Person';
 import Avatar from "@mui/material/Avatar";
 import {SCOPES} from "../utils/permissions-map";
 import Permission from "../components/utils/Permission";
-import {useNavigate} from "react-router-dom";
-import EditIcon from "@mui/icons-material/Edit";
+import FriendList from "../components/FriendList";
 
 export default function UserProfile () {
     const {user} = useContext(UserContext);
     const [technologies, setTechnologies] = useState([{name:'JavaScript',url:"https://www.softfluent.fr/blog/enregistrer-du-son-via-le-microphone-en-javascript/"}]) ;
-    const navigate = useNavigate();
-
-    const editUser = () => {
-        console.log('dopekz')
-        navigate(`/users/${user.id}`)
-    }
 
     return (
         <>
@@ -42,15 +35,11 @@ export default function UserProfile () {
                             </List>
                         </Grid>
                         <Divider/>
-
                         <Grid item xs={9}>
-                            <Button variant="outlined" startIcon={<EditIcon />} onClick={() => editUser()}>
-                                Modifier le profil
-                            </Button>
                             <List>
                                 <Typography>Technologies favorites</Typography>
                                 {technologies?.length>0 ? technologies.map( (techno) => {
-                                    return <Grid>
+                                    return <Grid key={techno.name}>
                                         <ListItem>
                                             <img width={50} height={50}  alt={'Image de ' + techno.name} src={techno.url} />
                                             <ListItemText primary={techno.name}/>
@@ -61,6 +50,9 @@ export default function UserProfile () {
                                 }
                             </List>
                         </Grid>
+                        <Box>
+                            <FriendList userId={user.id}/>
+                        </Box>
                     </Grid>
                 </div>
             </Permission>

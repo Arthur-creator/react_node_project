@@ -15,6 +15,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import {Link} from "@mui/material";
 import {UserContext} from "../provider/AuthProvider";
 import {useNavigate} from "react-router-dom";
+import SearchInput from "./Header/SearchInput";
 
 
 export default function PrimarySearchAppBar() {
@@ -94,17 +95,8 @@ export default function PrimarySearchAppBar() {
                 horizontal: 'right',
             }}
             open={isMobileMenuOpen}
-            onClose={handleMobileMenuClose}
-        >
-            <MenuItem>
-                <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                    <Badge badgeContent={4} color="error">
-                        <MailIcon/>
-                    </Badge>
-                </IconButton>
-                <p>Messages</p>
-            </MenuItem>
-            <MenuItem>
+            onClose={handleMobileMenuClose}>
+            {/* <MenuItem>
                 <IconButton
                     size="large"
                     aria-label="show 17 new notifications"
@@ -115,15 +107,14 @@ export default function PrimarySearchAppBar() {
                     </Badge>
                 </IconButton>
                 <p>Notifications</p>
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem onClick={handleProfileMenuOpen}>
                 <IconButton
                     size="large"
                     aria-label="account of current user"
                     aria-controls="primary-search-account-menu"
                     aria-haspopup="true"
-                    color="inherit"
-                >
+                    color="inherit">
                     <AccountCircle/>
                 </IconButton>
                 <p>Profile</p>
@@ -167,12 +158,7 @@ export default function PrimarySearchAppBar() {
                         <>
                             <Box sx={{flexGrow: 1}}/>
                             <Box sx={{display: {xs: 'none', md: 'flex'}}}>
-                                <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                                    <Badge badgeContent={4} color="error">
-                                        <MailIcon/>
-                                    </Badge>
-                                </IconButton>
-                                <IconButton
+                                {/* <IconButton
                                     size="large"
                                     aria-label="show 17 new notifications"
                                     color="inherit"
@@ -180,7 +166,7 @@ export default function PrimarySearchAppBar() {
                                     <Badge badgeContent={17} color="error">
                                         <NotificationsIcon/>
                                     </Badge>
-                                </IconButton>
+                                </IconButton> */}
                                 <IconButton
                                     size="large"
                                     edge="end"

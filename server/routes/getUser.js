@@ -1,8 +1,33 @@
 const { Router } = require("express");
-const { User, Friends} = require("../models/postgres");
-const { ValidationError } = require("sequelize");
+const { User } = require("../models/postgres");
+const { Op } =  require("sequelize");
 
 const router = new Router();
+
+router.get("/search-users", async (req, res) => {
+    if(!req.query.q) {
+        try {
+            const users = await User.findAll();
+            return res.json(users);
+        } catch (error) {
+            console.error(error);
+            return res.sendStatus(500);
+        }
+    };
+    const [fName, lName] = req.query.q.split(" ");
+    try {
+        const users = await User.findAll({
+            where: {
+                firstname: { [Op.like]: `%${fName}` },
+                lastname: { [Op.like]: `%${lName}` },
+              },
+        });
+        return res.json(users);
+    } catch (error) {
+        res.sendStatus(500);
+        console.error(error);
+    }
+});
 
 router.get("/users", async (req, res) => {
     try {
@@ -28,18 +53,6 @@ router.get("/users/:id", async (req, res) => {
     }
 });
 
-router.get('/friends/:id',async(req,res)=> {
-    try {
-        const friends = await Friends.findAll({where:{user_id:req.params.id}});
-        if (!friends) {
-            res.sendStatus(404);
-        } else {
-            res.json(friends);
-        }
-    } catch (error) {
-        res.sendStatus(500);
-        console.error(error);
-    }
-}) ;
+
 
 module.exports = router;

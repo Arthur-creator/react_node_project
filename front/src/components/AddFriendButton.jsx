@@ -1,7 +1,7 @@
 import {Button, Snackbar} from "@mui/material";
 import {useEffect, useState} from "react";
 
-export default function AddFriendButton({userId}) {
+export default function AddFriendButton({sourceId, targetId}) {
     const [loading, setLoading] = useState(false);
     const [variant, setVariant] = useState('outlined');
     const [snackbarOpened, setSnackbarOpened] = useState(false);
@@ -21,9 +21,20 @@ export default function AddFriendButton({userId}) {
     }, [loading, success]);
 
     const addFriend = () => {
+        console.log(targetId)
         try {
             setLoading(true)
-            console.log('adding friend', userId);
+            const res = fetch(`http://localhost:4000/api/friends/`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                    'Content-type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: sourceId,
+                    friend_id: targetId,
+                }),
+            })
             // If request
             setSnackbarMessage('Friend added');
             setSuccess(true);
