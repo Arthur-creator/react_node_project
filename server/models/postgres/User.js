@@ -50,6 +50,14 @@ User.init(
       allowNull: false,
       defaultValue: false,
     },
+      nombreReported: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+      }
+    // raisonReport: {
+    //   type: DataTypes.ARRAY(DataTypes.STRING),
+    //     allowNull: true
+    // }
   },
   {
     sequelize: connection,

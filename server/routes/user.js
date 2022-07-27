@@ -6,7 +6,9 @@ const router = new Router();
 
 router.get("/users", async (req, res) => {
   try {
-    const users = await User.findAll({ where: {...req.query, deletedAt:null} });
+    const users = await User.findAll({
+      where: {...req.query, deletedAt:null}
+    });
     res.json(users);
   } catch (error) {
     res.sendStatus(500);

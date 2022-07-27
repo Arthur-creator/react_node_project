@@ -11,7 +11,7 @@ export default function Messages() {
     const [messages,setMessages] = useState([])
     const [loading,setLoading] = useState(true)
     useEffect(() => {
-        fetch("http://localhost:4000/api/messages?isReported=true", {
+        fetch("http://localhost:4000/api/messages?is_reported=true", {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6ImF1c2Vjb3VycyIsImlhdCI6MTY1ODY4NTM2MCwiZXhwIjoxNjkwMjQyOTYwfQ.DiPfuOFyoeNYuBKFwQksDC55rTydfMDW8eht-xRrWZm4xykr0Aj0GbtSne7pypGxkDO6tuFVB5SU_Lvyep33Ew',

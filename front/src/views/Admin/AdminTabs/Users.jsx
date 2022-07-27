@@ -28,7 +28,6 @@ export default function Users() {
     }, [reloadData])
 
     const deleteUser = (user) => {
-        console.log(user)
         fetch("http://localhost:4000/api/users/"+user.id, {
             method: 'PUT',
             headers: {
