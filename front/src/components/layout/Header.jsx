@@ -14,6 +14,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import {Link, Stack} from "@mui/material";
 import {UserContext} from "../provider/AuthProvider";
 import {useNavigate} from "react-router-dom";
+import SearchInput from "./Header/SearchInput";
 
 
 export default function PrimarySearchAppBar() {
@@ -104,6 +105,7 @@ export default function PrimarySearchAppBar() {
                     <MenuItem onClick={() => handleRedirectMenu('/profile')}>My Account</MenuItem>
                     <MenuItem onClick={handleMenuClose}>Log out</MenuItem>
                 </Stack>
+
             </MenuItem>
         </Menu>
     );
@@ -140,35 +142,38 @@ export default function PrimarySearchAppBar() {
                             </Typography>
                         </Link>
                     }
+                    {user &&
+                        <>
+                            <Box sx={{flexGrow: 1}}/>
+                            <Box sx={{display: {xs: 'none', md: 'flex'}}}>
+                                <IconButton
+                                    size="large"
+                                    edge="end"
+                                    aria-label="account of current
 
-                    <Box sx={{flexGrow: 1}}/>
-                    <Box sx={{display: {xs: 'none', md: 'flex'}}}>
-                        <IconButton
-                            size="large"
-                            edge="end"
-                            aria-label="account of current 
-                            
-                            "
-                            aria-controls={menuId}
-                            aria-haspopup="true"
-                            onClick={handleProfileMenuOpen}
-                            color="inherit"
-                        >
-                            <AccountCircle/>
-                        </IconButton>
-                    </Box>
-                    <Box sx={{display: {xs: 'flex', md: 'none'}}}>
-                        <IconButton
-                            size="large"
-                            aria-label="show more"
-                            aria-controls={mobileMenuId}
-                            aria-haspopup="true"
-                            onClick={handleMobileMenuOpen}
-                            color="inherit"
-                        >
-                            <MoreIcon/>
-                        </IconButton>
-                    </Box>
+                                    "
+                                    aria-controls={menuId}
+                                    aria-haspopup="true"
+                                    onClick={handleProfileMenuOpen}
+                                    color="inherit"
+                                >
+                                    <AccountCircle/>
+                                </IconButton>
+                            </Box>
+                            <Box sx={{display: {xs: 'flex', md: 'none'}}}>
+                                <IconButton
+                                    size="large"
+                                    aria-label="show more"
+                                    aria-controls={mobileMenuId}
+                                    aria-haspopup="true"
+                                    onClick={handleMobileMenuOpen}
+                                    color="inherit"
+                                >
+                                    <MoreIcon/>
+                                </IconButton>
+                            </Box>
+                        </>
+                    }
                 </Toolbar>
             </AppBar>
             {renderMobileMenu}

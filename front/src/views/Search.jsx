@@ -1,14 +1,17 @@
-import {Box, Button, Card, CardContent, Stack, Typography} from "@mui/material";
+import { Box, Button, Card, CardContent, Stack, Typography } from "@mui/material";
 import ProfilePicture from "../components/ProfilePicture";
-import {useState} from "react";
+import { useState, useContext } from "react";
 import RecommendedFriends from "../components/RecommendedFriends";
-import {useSearchParams} from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import AddFriendButton from "../components/AddFriendButton";
+import { UserContext } from "../components/provider/AuthProvider";
+import { useEffect } from "react";
 
-
-function UserCard({user}) {
+function UserCard({ userData }) {
+    console.log(userData)
+    const { user } = useContext(UserContext);
     return (
-        <Card sx={{minWidth: 275}}>
+        <Card sx={{ minWidth: 275 }}>
             <CardContent>
                 <Box sx={{
                     display: 'flex',
@@ -21,13 +24,13 @@ function UserCard({user}) {
                         alignItems: 'flex-start',
                         gap: 2,
                     }}>
-                        <ProfilePicture name={user.name}/>
+                       <ProfilePicture name={`${user.firstname} ${user.lastname}`} />
                         <Box>
-                            <Typography variant="h5" component="div">{user.name}</Typography>
-                            <Typography color="text.secondary">{user.class}</Typography>
+                            <Typography variant="h5" component="div">{userData.firstname} {userData.lastname}</Typography>
+                            {/* <Typography color="text.secondary">{userData.class}</Typography> */}
                         </Box>
                     </Box>
-                    <AddFriendButton/>
+                    <AddFriendButton sourceId={user.id} targetId={userData.id} />
                 </Box>
             </CardContent>
         </Card>
@@ -36,16 +39,21 @@ function UserCard({user}) {
 
 function SearchResults() {
     let [searchParams, setSearchParams] = useSearchParams();
-    const [users, setUsers] = useState([
-        {
-            name: 'Antoine Daniel',
-            class: '4IW1',
-        },
-        {
-            name: 'Hans Burger',
-            class: '4IW3',
-        },
-    ]);
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+        (async () => {
+            const query = searchParams.get('q');
+            try {
+                const response = await fetch(`http://localhost:4000/search-users?q=${query}`);
+                const data = await response.json();
+                setUsers(data);
+                console.log(data)
+            } catch (e) {
+                console.log(e);
+            }
+        })();
+    }, [searchParams]);
 
     return (
         <Stack spacing={2}>
@@ -55,7 +63,7 @@ function SearchResults() {
                 flexDirection: 'column',
                 gap: 1,
             }}>
-                {users.map(user => <UserCard key={user.name} user={user}/>)}
+                {users.map(user => <UserCard key={user.name} userData={user} />)}
             </Box>
         </Stack>
     )
@@ -65,9 +73,9 @@ function SearchResults() {
 export default function Search() {
 
     return (
-        <Box sx={{paddingTop: 3}}>
-            <RecommendedFriends sx={{marginBottom: 4}}/>
-            <SearchResults/>
+        <Box sx={{ paddingTop: 3 }}>
+            {/* <RecommendedFriends sx={{ marginBottom: 4 }} /> */}
+            <SearchResults />
         </Box>
     );
 }

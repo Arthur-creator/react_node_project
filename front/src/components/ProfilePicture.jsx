@@ -2,13 +2,13 @@ import {Avatar} from "@mui/material";
 
 export default function ProfilePicture({name}) {
     function stringToInitials(name) {
-        return name.split(' ').map(word => word[0]).join('');
+        return name?.split(' ').map(word => word[0]).join('');
     }
     function stringToColor(string) {
         let hash = 0;
         let i;
-        for (i = 0; i < string.length; i += 1) {
-            hash = string.charCodeAt(i) + ((hash << 5) - hash);
+        for (i = 0; i < string?.length; i += 1) {
+            hash = string?.charCodeAt(i) + ((hash << 5) - hash);
         }
         let color = '#';
         for (i = 0; i < 3; i += 1) {
