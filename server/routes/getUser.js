@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const { User, Friends} = require("../models/postgres");
-const { ValidationError } = require("sequelize");
+const { ValidationError, Op } = require("sequelize");
+
 
 const router = new Router();
 
@@ -30,7 +31,16 @@ router.get("/users/:id", async (req, res) => {
 
 router.get('/friends/:id',async(req,res)=> {
     try {
-        const friends = await Friends.findAll({where:{user_id:req.params.id}});
+        const friends = await Friends.findAll({where:{
+            [Op.or] : [
+                {
+                    user_id:req.params.id
+                },
+                {
+                    friend_id:req.params.id
+                }
+            ]
+        }});
         if (!friends) {
             res.sendStatus(404);
         } else {
