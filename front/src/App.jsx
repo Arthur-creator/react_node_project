@@ -2,7 +2,7 @@ import Header from './components/layout/Header'
 import {Container} from "@mui/material";
 import Router from "./routes/Router";
 import React from 'react';
-import UserProvider from "./components/provider/AuthProvider";
+import UserProvider, {UserContext} from "./components/provider/AuthProvider";
 
 function App() {
 

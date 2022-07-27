@@ -203,8 +203,6 @@ router.get("/confirm/:confirmationCode", async (req, res) => {
 
 module.exports = router;
 
-
-
 const routes = [
     {
         name: 'home',

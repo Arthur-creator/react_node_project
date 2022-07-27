@@ -62,7 +62,7 @@ export default function PrimarySearchAppBar() {
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-    const {user} = useContext(UserContext);
+    const {user, setUserInfo} = useContext(UserContext);
 
     const navigate = useNavigate();
 
@@ -86,6 +86,13 @@ export default function PrimarySearchAppBar() {
     const handleRedirectMenu = (route) => {
         navigate(route);
         handleMenuClose()
+    }
+
+    const handleLogout = () => {
+        handleMenuClose();
+        handleMobileMenuClose();
+        setUserInfo(null);
+        navigate('/login');
     }
 
     const menuId = 'primary-search-account-menu';
@@ -172,7 +179,7 @@ export default function PrimarySearchAppBar() {
                         </Typography>
                     </Link>
                     {
-                        user.isAdmin === true &&
+                        user && user.isAdmin === true &&
                         <Link onClick={() => navigate('/admin')} style={{cursor:"pointer"}}>
                             <Typography
                                 color="white">
@@ -180,12 +187,15 @@ export default function PrimarySearchAppBar() {
                             </Typography>
                         </Link>
                     }
+
                     <Box sx={{flexGrow: 1}}/>
                     <Box sx={{display: {xs: 'none', md: 'flex'}}}>
                         <IconButton
                             size="large"
                             edge="end"
-                            aria-label="account of current user"
+                            aria-label="account of current 
+                            
+                            "
                             aria-controls={menuId}
                             aria-haspopup="true"
                             onClick={handleProfileMenuOpen}
