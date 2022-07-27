@@ -1,4 +1,4 @@
-include .env
+#npm run start --workspace=front include .env
 
 start-front:
 	npm run start --workspace=front
