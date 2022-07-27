@@ -325,11 +325,6 @@ export default function Chat() {
         <>
             <Permission scopes={[SCOPES.canView]}>
                 <div>
-                    <Grid container>
-                        <Grid item xs={12}>
-                            <Typography variant={"h5"} className={'header-message'}>Chat</Typography>
-                        </Grid>
-                    </Grid>
                     <Grid container className={classes.chatSection}>
                         <Grid item xs={3} className={classes.borderRight500}>
                             <Grid item xs={12} style={{padding:'10px'}}>  <TextField id="outlined-basic-email" label="Search" variant="outlined" fullWidth /></Grid>
