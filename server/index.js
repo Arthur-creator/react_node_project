@@ -1,5 +1,4 @@
 const express = require("express");
-const cors = require("cors") ;
 const UserRouter = require("./routes/user");
 const GetUserRouter = require('./routes/getUser') ;
 const SecurityRouter = require("./routes/security");
