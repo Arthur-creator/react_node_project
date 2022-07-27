@@ -30,7 +30,7 @@ router.get("/users/:id", async (req, res) => {
 
 router.get('/friends/:id',async(req,res)=> {
     try {
-        const friends = await Friends.findAll({where:req.query});
+        const friends = await Friends.findAll({where:{user_id:req.params.id}});
         if (!friends) {
             res.sendStatus(404);
         } else {
