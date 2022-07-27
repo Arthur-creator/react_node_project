@@ -7,7 +7,7 @@ const router = new Router();
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("../configs/nodemailer.config");
-const {createToken, generateRefreshToken} = require("../lib/jwt");
+const {generateAccessToken, generateRefreshToken} = require("../lib/jwt");
 
 let refreshTokens = [];
 
@@ -35,7 +35,7 @@ router.post("/refresh", (req, res) => {
     err && console.log(err);
     refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
 
-    const newAccessToken = createToken(user);
+    const newAccessToken = generateAccessToken(user);
     const newRefreshToken = generateRefreshToken(user);
 
     refreshTokens.push(newRefreshToken);
@@ -72,7 +72,7 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    const accessToken = createToken(user);
+    const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
     refreshTokens.push(refreshToken);
     res.status(200).json({
