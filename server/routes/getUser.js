@@ -1,9 +1,34 @@
 const { Router } = require("express");
+
 const { User, Friends} = require("../models/postgres");
 const { ValidationError, Op } = require("sequelize");
 
-
 const router = new Router();
+
+router.get("/search-users", async (req, res) => {
+    if(!req.query.q) {
+        try {
+            const users = await User.findAll();
+            return res.json(users);
+        } catch (error) {
+            console.error(error);
+            return res.sendStatus(500);
+        }
+    };
+    const [fName, lName] = req.query.q.split(" ");
+    try {
+        const users = await User.findAll({
+            where: {
+                firstname: { [Op.like]: `%${fName}` },
+                lastname: { [Op.like]: `%${lName}` },
+              },
+        });
+        return res.json(users);
+    } catch (error) {
+        res.sendStatus(500);
+        console.error(error);
+    }
+});
 
 router.get("/users", async (req, res) => {
     try {
@@ -28,6 +53,7 @@ router.get("/users/:id", async (req, res) => {
         console.error(error);
     }
 });
+
 
 router.get('/friends/:id',async(req,res)=> {
     try {

@@ -11,6 +11,7 @@ import {EditAccount} from "../components/utils/EditAccount";
 import Register from "../views/Register";
 import AccountConfirmation from "../views/AccountConfirmation";
 import UserProfile from '../views/UserProfile' ;
+import Search from '@/views/Search';
 
 //hook that return a list of routes
 export const useRoutes = () => {
@@ -38,6 +39,14 @@ export const useRoutes = () => {
                 <RouterView>
                     <Login/>
                 </RouterView>,
+        },
+        {
+            name: 'search',
+            path: '/search',
+            element:
+                <RouterView>
+                    <Search/>
+                </RouterView>
         },
         {
             name: 'chat',
