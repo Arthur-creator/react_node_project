@@ -54,6 +54,7 @@ export default function PrimarySearchAppBar() {
         handleMenuClose();
         handleMobileMenuClose();
         setUserInfo(null);
+
         navigate('/login');
     }
 
@@ -76,7 +77,7 @@ export default function PrimarySearchAppBar() {
         >
             <Stack>
                 <MenuItem onClick={() => handleRedirectMenu('/profile')}>My Account</MenuItem>
-                <MenuItem onClick={handleMenuClose}>Log out</MenuItem>
+                <MenuItem onClick={() => {handleLogout();}}>Log out</MenuItem>
             </Stack>
 
         </Menu>
@@ -103,7 +104,7 @@ export default function PrimarySearchAppBar() {
             <MenuItem>
                 <Stack>
                     <MenuItem onClick={() => handleRedirectMenu('/profile')}>My Account</MenuItem>
-                    <MenuItem onClick={handleMenuClose}>Log out</MenuItem>
+                    <MenuItem onClick={() => {handleLogout();}}>Log out</MenuItem>
                 </Stack>
 
             </MenuItem>
