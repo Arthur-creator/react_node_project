@@ -6,7 +6,6 @@ import {UserContext} from "../components/provider/AuthProvider";
 export default function Home({title}) {
 
     const {user} = useContext(UserContext) ;
-    console.log(user) ;
     return (
         <>
             <h1>{title}</h1>

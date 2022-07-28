@@ -14,7 +14,7 @@ export default function Reports() {
         fetch("http://localhost:4000/api/users?isReported=true", {
             method: 'GET',
             headers: {
-                'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6ImF1c2Vjb3VycyIsImlhdCI6MTY1ODY4NTM2MCwiZXhwIjoxNjkwMjQyOTYwfQ.DiPfuOFyoeNYuBKFwQksDC55rTydfMDW8eht-xRrWZm4xykr0Aj0GbtSne7pypGxkDO6tuFVB5SU_Lvyep33Ew',
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
             }
         }).then(res => res.json())
             .then(data => setUsers(data))
@@ -22,15 +22,22 @@ export default function Reports() {
     }, [reloadData])
 
     const validReport = (user) => {
-        console.log(user.numberReport)
+        if (user.nombreReported === 2) {
+            fetch("http://localhost:4000/api/users/" + user.id, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                }
+            }).then(res => res.json())
+        }
+
         fetch("http://localhost:4000/api/users/" + user.id,{
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6ImF1c2Vjb3VycyIsImlhdCI6MTY1ODY4NTM2MCwiZXhwIjoxNjkwMjQyOTYwfQ.DiPfuOFyoeNYuBKFwQksDC55rTydfMDW8eht-xRrWZm4xykr0Aj0GbtSne7pypGxkDO6tuFVB5SU_Lvyep33Ew',
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 'Content-type': 'application/json',
             },
             body: JSON.stringify({
-                deletedAt: user.nombreReported === 2 && new Date(),
                 isReported:false,
                 nombreReported: user.nombreReported ? user.nombreReported + 1 : 1
             })
@@ -41,7 +48,7 @@ export default function Reports() {
         fetch("http://localhost:4000/api/users/" + user.id,{
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6ImF1c2Vjb3VycyIsImlhdCI6MTY1ODY4NTM2MCwiZXhwIjoxNjkwMjQyOTYwfQ.DiPfuOFyoeNYuBKFwQksDC55rTydfMDW8eht-xRrWZm4xykr0Aj0GbtSne7pypGxkDO6tuFVB5SU_Lvyep33Ew',
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 'Content-type': 'application/json',
             },
             body: JSON.stringify({
@@ -58,14 +65,15 @@ export default function Reports() {
             {
                 users.map(user => {
                     return (
-                        <div key={user.name}>
+                        <div key={user.id}>
                             <ListItem button key={"RemySharp"}>
-                                <ListItemText primary={user.name}/>
+                                <ListItemText primary={user.lastname} secondary={user.primary}/>
                                 <ListItemText primary={user.email}/>
-                                <IconButton aria-label="Example" onClick={() => validReport(user)}>
+                                <ListItemText primary="nombre de reports" secondary={user.nombreReported ? user.nombreReported : 0}/>
+                                <IconButton aria-label="Valider le report" onClick={() => validReport(user)}>
                                     <GavelIcon />
                                 </IconButton>
-                                <IconButton aria-label="Example" onClick={() => abortReport(user)}>
+                                <IconButton aria-label="Annuler le report" onClick={() => abortReport(user)}>
                                     <CloseIcon />
                                 </IconButton>
                             </ListItem>

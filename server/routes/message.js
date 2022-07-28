@@ -101,6 +101,59 @@ router.put("/users/:id/messages/:message_id", async (req,res) => {
     }
 }) ;
 
+/* create route for put a messages */
+router.put("/messages/:id", async (req,res) => {
+    try {
+        const result = await Message.update(req.body, {
+            where: {
+                id: req.params.id,
+            },
+            returning: true,
+            individualHooks: true
+        }) ;
+        const [, lines] = result ;
+        if(!lines[0]) res.sendStatus(404) ;
+        else res.json(lines[0]) ;
+    }catch (e) {
+        if(e instanceof ValidationError) {
+            console.error(e) ;
+            res.status(422).json({
+                text: 'must not be empty'
+            }) ;
+        } else {
+            console.error(e) ;
+            res.sendStatus(500) ;
+        }
+    }
+}) ;
+
+
+router.put("/users/:id/messages/:message_id", async (req,res) => {
+    try {
+        const result = await Message.update(req.body, {
+            where: {
+                authorId: req.params.id,
+                id: req.params.message_id,
+            },
+            returning: true,
+            individualHooks: true
+        }) ;
+        const [, lines] = result ;
+        if(!lines[0]) res.sendStatus(404) ;
+        else res.json(lines[0]) ;
+    }catch (e) {
+        if(e instanceof ValidationError) {
+            console.error(e) ;
+            res.status(422).json({
+                text: 'must not be empty'
+            }) ;
+        } else {
+            console.error(e) ;
+            res.sendStatus(500) ;
+        }
+    }
+}) ;
+
 router.delete("/users/:id/messages/:message_id", async (req,res)=> {
     try {
         const nbLines = await Message.destroy({where:
