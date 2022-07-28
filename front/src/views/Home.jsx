@@ -59,6 +59,7 @@ function UserList({source}) {
 export default function Home({ title }) {
     const { user } = useContext(UserContext);
 
+
     return (
         <>
             <h1>Welcome to Techie!</h1>
