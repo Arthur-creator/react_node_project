@@ -4,7 +4,7 @@ const { ValidationError } = require("sequelize");
 
 const router = new Router();
 
-router.post('/friends/', async (req, res) => {
+router.post('/friends', async (req, res) => {
     try {
         const friend = await Friends.create({
             user_id: req.body.user_id,

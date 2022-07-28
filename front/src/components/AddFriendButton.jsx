@@ -31,7 +31,7 @@ export default function AddFriendButton({sourceId, targetId}) {
                     'Content-type': 'application/json',
                 },
                 body: JSON.stringify({
-                    user_id: sourceId,
+                    user_id: sourceId ?? localStorage.getItem('user-access-token'),
                     friend_id: targetId,
                 }),
             })

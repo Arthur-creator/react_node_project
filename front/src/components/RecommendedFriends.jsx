@@ -47,7 +47,7 @@ function RecommendedFriendCard({user}) {
                 </Typography>
             </CardContent>
             <CardActions>
-                <AddFriendButton/>
+                <AddFriendButton sourceId={localStorage.getItem('user-access-token')} targetId={user.id}/>
             </CardActions>
         </Card>
     )
