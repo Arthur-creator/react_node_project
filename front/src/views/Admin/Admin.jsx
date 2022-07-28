@@ -1,9 +1,6 @@
-import {useEffect, useRef, useState} from "react";
+import {useState} from "react";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import PhoneIcon from '@mui/icons-material/Phone';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import AnalyticsIcon from '@mui/icons-material/Analytics';
 import PersonPinIcon from '@mui/icons-material/PersonPin';
 import MessageIcon from '@mui/icons-material/Message';
 import ReportIcon from '@mui/icons-material/Report';
@@ -29,7 +26,7 @@ export default function Admin() {
                     <Tab icon={<PersonPinIcon />} label="Utilisateurs" />
                     <Tab icon={<ReportIcon />} label="Utilisateurs reportés" />
                     <Tab icon={<MessageIcon/>} label="Messages Instantanés" />
-                    <Tab icon={<AnalyticsIcon/>} label="Analytics" />
+                    <Tab  label="Analytics" />
                 </Tabs>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
