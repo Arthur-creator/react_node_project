@@ -42,7 +42,7 @@ export default function UserProfile () {
                             </Button>
                             <List>
                                 <Typography>Technologies favorites</Typography>
-                                {user?.technos?.split('0')?.length>0 ? user?.technos.split('0').map( (techno,key) => {
+                                {user?.technos !== null ?  user?.technos.split('0').map( (techno,key) => {
                                     return <Grid key={key}>
                                         <ListItem>
                                             <img width={50} height={50}  alt={'Image de ' + techno} src={"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/"+techno+"/"+techno+"-original.svg"} />
