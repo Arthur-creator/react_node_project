@@ -6,7 +6,7 @@ import {Card, CardContent, CardActions, Typography, Box} from "@mui/material";
 import AddFriendButton from "../components/AddFriendButton";
 import ProfilePicture from "../components/ProfilePicture";
 
-function UserCard({user}) {
+function UserCard({userFriend, source}) {
     return (
         <Card sx={{ width: "390px" }}>
             <CardContent>
@@ -16,10 +16,10 @@ function UserCard({user}) {
                     gap: 2,
                     marginBottom: 2,
                 }}>
-                    <ProfilePicture name={`${user.firstname} ${user.lastname}`} />
+                    <ProfilePicture name={`${userFriend.firstname} ${userFriend.lastname}`} />
                     <Box>
-                        <Typography variant="h6" component="div">{user.firstname} {user.lastname}</Typography>
-                        <Typography color="text.secondary">{user.class}</Typography>
+                        <Typography variant="h6" component="div">{userFriend.firstname} {userFriend.lastname}</Typography>
+                        <Typography color="text.secondary">{userFriend.class}</Typography>
                     </Box>
                 </Box>
                 <Typography variant="body2">
@@ -27,12 +27,12 @@ function UserCard({user}) {
                 </Typography>
             </CardContent>
             <CardActions>
-                <AddFriendButton />
+                <AddFriendButton sourceId={source} targetId={userFriend.id} />
             </CardActions>
         </Card>
     )
 }
-function UserList() {
+function UserList({source}) {
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
@@ -50,7 +50,7 @@ function UserList() {
 
     return (
         <Box sx={{display: 'flex', gap: 2}}>
-            {users.map(user => <UserCard key={user.id} user={user} />)}
+            {users.map(user => <UserCard key={user.id} userFriend={user} source={source?.id}  />)}
         </Box>
     )
 }
@@ -58,11 +58,11 @@ function UserList() {
 
 export default function Home({ title }) {
     const { user } = useContext(UserContext);
-    console.log(user);
+
     return (
         <>
             <h1>Welcome to Techie!</h1>
-            <UserList />
+            <UserList source={user.id} />
         </>
     )
 }

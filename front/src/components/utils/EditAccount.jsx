@@ -39,7 +39,7 @@ export const EditAccount = () => {
         fetch('http://localhost:4000/api/'+userUrl, {
             method: 'GET',
             headers: {
-                'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6ImF1c2Vjb3VycyIsImlhdCI6MTY1ODY4NTM2MCwiZXhwIjoxNjkwMjQyOTYwfQ.DiPfuOFyoeNYuBKFwQksDC55rTydfMDW8eht-xRrWZm4xykr0Aj0GbtSne7pypGxkDO6tuFVB5SU_Lvyep33Ew',
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
             }
         }).then(res => res.json())
             .then(data => setUser(data))
@@ -78,7 +78,7 @@ export const EditAccount = () => {
             },
             body: JSON.stringify({
                ...initialValues,
-                'technos': personName.join('0')
+                'technos': personName?.join('0') ?? ""
             })
         }).then(res => res.json())
             .then(data => setUser(data))

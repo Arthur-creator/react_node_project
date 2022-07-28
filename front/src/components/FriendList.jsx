@@ -9,17 +9,25 @@ export default function FriendList({userId}) {
         (async () => {
             try {
                 setLoading(true);
-                const res = await fetch(`http://localhost:4000/api/friends/${userId}`, {
+                const res = await fetch(`http://localhost:4000/friends/${userId}`, {
                     headers: {
                         'Authorization': 'Bearer ' + localStorage.getItem('token'),
                         'Content-type': 'application/json',
                     },
                 });
+                const users = [] ;
+
                 const data = await res.json();
-                setFriends(data);
-                console.log(data)
+                console.log(data) ;
+                for(const us of data) {
+                    const tmp = await fetch('http://localhost:4000/users/' +us.friend_id ,{
+                        method: 'GET'
+                    }) ;
+                    users.push(await tmp.json()) ;
+                }
+                setFriends(users);
             } catch (e) {
-                console.log(e);
+                console.error(e);
             } finally {
                 setLoading(false);
             }

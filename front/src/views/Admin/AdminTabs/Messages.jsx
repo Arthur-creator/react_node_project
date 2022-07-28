@@ -2,33 +2,70 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Avatar from "@material-ui/core/Avatar";
 import ListItemText from "@material-ui/core/ListItemText";
-import {Table, TableHead} from "@mui/material";
+import {Button, Table, TableHead} from "@mui/material";
 import {TableBody, TableCell, TableRow} from "@material-ui/core";
 import {useEffect, useState} from "react";
 
 export default function Messages() {
 
-    const [messages,setMessages] = useState([])
-    const [loading,setLoading] = useState(true)
+    const [messages, setMessages] = useState([])
+    const [loading, setLoading] = useState(true)
     useEffect(() => {
-        fetch("http://localhost:4000/api/messages?is_reported=true", {
+        fetch("http://localhost:4000/messages", {
             method: 'GET',
             headers: {
-                'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6ImF1c2Vjb3VycyIsImlhdCI6MTY1ODY4NTM2MCwiZXhwIjoxNjkwMjQyOTYwfQ.DiPfuOFyoeNYuBKFwQksDC55rTydfMDW8eht-xRrWZm4xykr0Aj0GbtSne7pypGxkDO6tuFVB5SU_Lvyep33Ew',
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
             }
         }).then(res => res.json())
             .then(data => setMessages(data))
             .finally(() => setLoading(false))
     }, [])
 
-    const deleteUser = (user) => {
-        console.log(user)
+    const deleteMessage = (message) => {
+        fetch("http://localhost:4000/api/messages/" + message.id, {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify({
+                is_moderated: true
+            })
+        }).then(res => res.json())
+        fetch("http://localhost:4000/messages/" + message.id, {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify({
+                is_moderated: true
+            })
+        }).finally(() => setLoading(false))
     }
 
-    const abortReport = (user) => {
-        console.log(user)
+    const abortReport = (message) => {
+        fetch("http://localhost:4000/api/messages/" + message.id, {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify({
+                is_reported: false
+            })
+        }).then(res => res.json())
+        fetch("http://localhost:4000/messages/" + message.id, {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify({
+                is_reported: false
+            })
+        }).finally(() => setLoading(false))
     }
-
     return (
         !loading &&
         <>
@@ -37,19 +74,29 @@ export default function Messages() {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell><strong>Utilisateur</strong></TableCell>
+                            <TableCell><strong>Auteur</strong></TableCell>
                             <TableCell><strong>Message</strong></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {
-                            messages.map( message => (
-                                <TableRow>
-                                    <TableCell>{message.author}</TableCell>
-                                    <TableCell>{message.content}</TableCell>
-                                </TableRow>
-                            ))
-                        }
+                        {messages && messages.map(message => {
+                            return <TableRow key={message.id}>
+                                <TableCell>
+                                    <ListItem>
+                                        <ListItemText primary={message.author.firstname}
+                                                      secondary={message.author.lastname}/>
+                                        <ListItemText/>
+                                    </ListItem>
+                                </TableCell>
+                                <TableCell>
+                                    {message.text}
+                                </TableCell>
+                                <TableCell>
+                                    <Button onClick={() => deleteMessage(message)}>Supprimer le message</Button>
+                                    <Button onClick={() => abortReport(message)}>Classer sans suite</Button>
+                                </TableCell>
+                            </TableRow>
+                        })}
                     </TableBody>
                 </Table>
             }
