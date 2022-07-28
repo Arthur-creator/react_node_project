@@ -1,20 +1,21 @@
-import {useEffect, useState} from "react";
 import {PERMISSIONS} from "../../utils/permissions-map";
+import {useContext} from "react";
+import {UserContext} from "../provider/AuthProvider";
+
 
 // Custom hook that returns the role of the user
-export const useRole = () => {
-    const [role, setRole] = useState('GUEST');
-    useEffect(() => {
-        // Imagine that we take the role from the JWT token or a react Context
-        // const role = localStorage.getItem("role");
-        const role = 'ADMIN';
-        setRole(role);
-    }, []);
-    return role;
+export const useRole = (user) => {
+    if (user) {
+        if (user.isAdmin) {
+            return "ADMIN";
+        }
+        return "USER";
+    }
+    return "GUEST";
 }
 
 
-const hasPermission = ({permissions, scopes}) => {
+export const hasPermission = ({permissions, scopes}) => {
     const scopesMap = {};
     scopes.forEach((scope) => {
         scopesMap[scope] = true;
@@ -24,7 +25,8 @@ const hasPermission = ({permissions, scopes}) => {
 };
 
 export default function Permission({children, scopes = [], deniedCallback = () => {}}) {
-    const role = useRole();
+    const { user, setUser } = useContext(UserContext);
+    const role = useRole(user);
     const permissions = PERMISSIONS[role];
     const permissionGranted = hasPermission({permissions, scopes});
     if (!permissionGranted) {

@@ -1,0 +1,83 @@
+
+###############################
+#######      User       #######
+###############################
+GET http://localhost:4000/api/users
+Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IlRlc3QiLCJpYXQiOjE2NTg0MTg2OTUsImV4cCI6MTY4OTk3NjI5NX0.yR-oV71SScGAPay2wOUuRqJVmvrigd9Nna1MYnUY10YpI92n3jZIW49SgO0sMKsUSz9WR63A5GTmxG82wCq8TQ
+
+
+###
+GET http://localhost:4000/api/users/7
+Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywibmFtZSI6IlRlc3QiLCJpYXQiOjE2NTg0MTIzOTcsImV4cCI6MTY4OTk2OTk5N30.rDBL894r4AeE3flE7LULdAST4e3ZTVlgthjEBoRdeU0XWvdXET9pi3ECsoU74CtE8klectIFX7CYmsesCQ75tg
+
+###
+GET http://localhost:4000/api/users/8
+Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywibmFtZSI6IlRlc3QiLCJpYXQiOjE2NTY1NzI5NzIsImV4cCI6MTY4ODEzMDU3Mn0.aMFNb1hEWujdluywNN0M68oCeERJRWvbKrKS9zup-U8i3j_Do_Ryl7flIMKcj38KpOfSwVL2PwDH1N3iaoyxBw
+
+###
+POST http://localhost:4000/api/users
+Content-Type: application/json
+
+{
+    "email": "ok@ok.com",
+    "password": "dsfcsdvcsd",
+    "firstname": "Test",
+    "lastname": "Test"
+}
+
+###
+#$2a$10$.zcaM4Xi8uzR3i0oUEAQcu2budFKoXN/EHmMZbLvoQDKJks1.ECKW
+PUT http://localhost:4000/api/users/5
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywibmFtZSI6IlRlc3QiLCJpYXQiOjE2NTg0MTIzOTcsImV4cCI6MTY4OTk2OTk5N30.rDBL894r4AeE3flE7LULdAST4e3ZTVlgthjEBoRdeU0XWvdXET9pi3ECsoU74CtE8klectIFX7CYmsesCQ75tg
+
+{
+    "name": "Test3"
+}
+
+
+
+###
+DELETE http://localhost:4000/api/users/1
+
+###
+#$2a$10$Et1Q531C6n9GDG4DqJnP9e26rLl109O.EaFlxfS9pTtQ6kkiLftsG
+POST http://localhost:4000/register
+Content-Type: application/json
+
+{
+    "email": "ok4@ok.com",
+    "password": "dsfcsdvcsd",
+    "confirmPassword": "dsfcsdvcsd",
+    "firstname": "John",
+    "lastname": "Doe"
+}
+
+###
+POST http://localhost:4000/login
+Content-Type: application/json
+
+{
+    "email": "alexbaudry0@gmail.com",
+    "password": "oui"
+
+}
+
+
+###
+POST http://localhost:4000/api/users/2/messages
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IlRlc3QiLCJpYXQiOjE2NTg2ODUzMjEsImV4cCI6MTY5MDI0MjkyMX0.8zGP5FucfaHLLXOE8lzi9ftObYhiqkufDNu-fiMENgEDbXgDue7oehwkDHUga5w8KpdZHRjSkpkKwLakr2z_6w
+
+{
+  "sendToId": 1,
+  "text" : "Salut! Comment tu vas ?"
+
+}
+
+###
+GET http://localhost:4000/api/users/1/messages
+Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IlRlc3QiLCJpYXQiOjE2NTg0MTg2OTUsImV4cCI6MTY4OTk3NjI5NX0.yR-oV71SScGAPay2wOUuRqJVmvrigd9Nna1MYnUY10YpI92n3jZIW49SgO0sMKsUSz9WR63A5GTmxG82wCq8TQ
+###eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywibmFtZSI6IlRlc3QiLCJpYXQiOjE2NTg0MTIzOTcsImV4cCI6MTY4OTk2OTk5N30.rDBL894r4AeE3flE7LULdAST4e3ZTVlgthjEBoRdeU0XWvdXET9pi3ECsoU74CtE8klectIFX7CYmsesCQ75tg
+
+#$2a$10$LIBh5jRXpDHcBuFa1fNpFOKIHaCSKNcq5H/Xe7H9s/2NqY85nGBeW
