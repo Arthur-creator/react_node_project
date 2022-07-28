@@ -63,7 +63,7 @@ export default function Home({ title }) {
     return (
         <>
             <h1>Welcome to Techie!</h1>
-            <UserList source={user.id} />
+            <UserList source={user?.id} />
         </>
     )
 }
